@@ -4,10 +4,9 @@ import { PhotoService } from './photo/photo.service';
 
 @Controller()
 export class AppController {
-
   // @Inject('PhotoService')
   // private readonly photo: PhotoService;
-  
+
   constructor(private readonly appService: AppService) {}
 
   @Get()

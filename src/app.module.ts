@@ -5,10 +5,13 @@ import { DatabaseModule } from './database/database.module';
 import { PhotoController } from './photo/photo.controller';
 import { PhotoModule } from './photo/photo.module';
 import { PhotoService } from './photo/photo.service';
+import { UserController } from './user/user.controller';
+import { UserModule } from './user/user.module';
+import { UserService } from './user/user.service';
 
 @Module({
-  imports: [PhotoModule],
-  controllers: [AppController, PhotoController],
-  providers: [AppService, PhotoService],
+  imports: [PhotoModule, UserModule],
+  controllers: [AppController, PhotoController, UserController],
+  providers: [AppService, PhotoService, UserService],
 })
-export class AppModule { }
+export class AppModule {}
