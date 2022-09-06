@@ -5,6 +5,7 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 import { TokenService } from '../token/token.service';
+import { AppException } from './exception';
 
 @Injectable()
 export class ParseTokenPipe implements PipeTransform {
@@ -15,6 +16,10 @@ export class ParseTokenPipe implements PipeTransform {
     console.log('token:', value);
     const data = await this.tokenService.getTokenInfo(value);
     console.log('uid:', data);
+
+    if (data === null) {
+      throw new AppException(1, '用户未登录！');
+    }
     return data;
   }
 }

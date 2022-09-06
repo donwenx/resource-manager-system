@@ -1,6 +1,3 @@
 export class AppException {
-    constructor(
-        public code: number,
-        public message: string
-    ){}
+  constructor(public code: number, public message: string) {}
 }
