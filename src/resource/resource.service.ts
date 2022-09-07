@@ -25,4 +25,23 @@ export class ResourceService {
     data.path = path;
     return await this.resourceRepository.save(data);
   }
+
+  /**
+   * @param rid 文件id
+   * @returns 文件路径
+   */
+  async getPathByRid(rid: number) {
+    const data = await this.resourceRepository.findOneBy({ rid });
+    return data.path;
+  }
+
+  /**
+   * 更新下载量
+   * @param rid 资源id
+   */
+  async updateDownloadCount(rid: number) {
+    const data = await this.resourceRepository.findOneBy({ rid });
+    data.downloads += 1;
+    await this.resourceRepository.save(data);
+  }
 }
