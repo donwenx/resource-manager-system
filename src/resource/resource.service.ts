@@ -32,7 +32,7 @@ export class ResourceService {
    */
   async getPathByRid(rid: number) {
     const data = await this.resourceRepository.findOneBy({ rid });
-    return data.path;
+    return data;
   }
 
   /**

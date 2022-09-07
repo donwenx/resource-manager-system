@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 /**
  *
  * @param length 随机数的常数
@@ -20,4 +22,13 @@ export const createNonceStr = (length: number) => {
  */
 export const getTimeStamp = () => {
   return Math.floor(Date.now() / 1000);
+};
+
+export const createFilePath = (path: string) => {
+  return join(
+    __dirname, // E:\网页作业\普通的练习\vue项目\管理资源文件项目测试版\resource-manager-system\src\resource
+    '..',
+    '../public/upload',
+    path,
+  );
 };

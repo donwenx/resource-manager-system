@@ -15,7 +15,7 @@ import { ResourceService } from './resource.service';
 import { createReadStream, createWriteStream } from 'fs';
 import { join } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createNonceStr } from '../util/function';
+import { createFilePath, createNonceStr } from '../util/function';
 import { CreateResourceDto } from './resource.dto';
 import { User } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
@@ -44,14 +44,8 @@ export class ResourceController {
     console.log(file);
     const fileName = Date.now() + createNonceStr(8);
     const filePath = `${fileName}-${file.originalname}`;
-    const writeImage = createWriteStream(
-      join(
-        __dirname, // E:\网页作业\普通的练习\vue项目\管理资源文件项目测试版\resource-manager-system\src\resource
-        '..',
-        '../public/upload',
-        filePath,
-      ),
-    );
+    const fileFull = createFilePath(filePath);
+    const writeImage = createWriteStream(fileFull);
     writeImage.write(file.buffer);
     // return '上传成功';
 
@@ -77,14 +71,15 @@ export class ResourceController {
     // if(){
     //   throw new Error('当前账号未登录，需登录后下载！')
     // }
+
     console.log('rid', rid);
-    const path = await this.resourceService.getPathByRid(rid);
-    const filePath = join(
-      __dirname, // E:\网页作业\普通的练习\vue项目\管理资源文件项目测试版\resource-manager-system\src\resource
-      '..',
-      '../public/upload',
-      path,
-    );
+    const data = await this.resourceService.getPathByRid(rid);
+
+    if (data.state === 0) {
+      throw new Error('文件不存在！');
+    }
+    const path = data.path;
+    const filePath = createFilePath(path);
     const file = createReadStream(filePath);
     res.set({
       'Content-Disposition': `attachment; filename= "${path}"`,
@@ -92,4 +87,8 @@ export class ResourceController {
     await this.resourceService.updateDownloadCount(rid);
     return new StreamableFile(file);
   }
+
+  // 更新文件信息
+
+  // 删除文件state = 0；
 }
