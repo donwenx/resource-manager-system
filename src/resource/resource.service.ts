@@ -90,7 +90,7 @@ export class ResourceService {
     if (data.keywords) {
       resource.keywords = data.keywords;
     }
-    console.log('resource:', data, resource);
+    // console.log('resource:', data, resource);
     return await this.resourceRepository.save(resource);
   }
 }

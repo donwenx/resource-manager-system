@@ -2,7 +2,7 @@ import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { TokenService } from '../token/token.service';
-import { CreateUserDto, LoginDto } from './user.dto';
+import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
 import { Token } from '../token/token.entity';
 import { RequestToken } from '../common/user.decorator';
 
@@ -16,17 +16,14 @@ export class UserController {
   @Inject()
   private readonly tokenService: TokenService;
 
-  @Get('/list')
-  async findAll(@Query('page') page: string): Promise<User[]> {
-    return [];
-  }
-
   @Post('/create')
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return await this.userService.createUser(
+  async create(@Body() createUserDto: CreateUserDto): Promise<number> {
+    const data = await this.userService.createUser(
       createUserDto.name,
       createUserDto.password,
     );
+
+    return data.uid;
   }
 
   @Post('/login')
@@ -46,4 +43,19 @@ export class UserController {
   async logout(@RequestToken() token: Token) {
     await this.tokenService.setTokenOutLog(token.token);
   }
+
+  @Post('/update')
+  async update(
+    @RequestToken() token: Token,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    if (token.uid !== updateUserDto.uid) {
+      throw new Error('账号错误！');
+    }
+    const data = await this.userService.update(updateUserDto);
+    data.password = '';
+    return data;
+  }
+
+  // 设置超级管理员
 }
