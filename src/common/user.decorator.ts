@@ -9,4 +9,4 @@ export const GetToken = createParamDecorator(
   },
 );
 
-export const User = () => GetToken(ParseTokenPipe);
+export const RequestToken = () => GetToken(ParseTokenPipe);

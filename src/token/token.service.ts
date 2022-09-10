@@ -41,6 +41,20 @@ export class TokenService {
       // 过期时间
       return null;
     }
+    if (data.state === 0) {
+      // 用户主动登出
+      return null;
+    }
     return data;
+  }
+
+  /**
+   * 设置用户token过期
+   * @param token 用户token
+   */
+  async setTokenOutLog(token: string) {
+    const data = await this.tokenRepository.findOneBy({ token });
+    data.state = 0;
+    await this.tokenRepository.save(data);
   }
 }

@@ -17,7 +17,7 @@ import { join } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createFilePath, createNonceStr } from '../util/function';
 import { CreateResourceDto } from './resource.dto';
-import { User } from '../common/user.decorator';
+import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
 import { request } from 'http';
 import type { Response } from 'express';
@@ -39,7 +39,7 @@ export class ResourceController {
   async addResource(
     @UploadedFile() file,
     @Body() createResourceDto: CreateResourceDto,
-    @User() token: Token,
+    @RequestToken() token: Token,
   ) {
     console.log(file);
     const fileName = Date.now() + createNonceStr(8);

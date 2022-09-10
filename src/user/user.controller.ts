@@ -3,6 +3,8 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { TokenService } from '../token/token.service';
 import { CreateUserDto, LoginDto } from './user.dto';
+import { Token } from '../token/token.entity';
+import { RequestToken } from '../common/user.decorator';
 
 // 只实现业务逻辑
 // 列如：验证密码、读取用户表、
@@ -38,5 +40,10 @@ export class UserController {
     }
     // 密码错误，返回state = 1；
     throw new Error('密码错误，登录失败');
+  }
+
+  @Post('/logout')
+  async logout(@RequestToken() token: Token) {
+    await this.tokenService.setTokenOutLog(token.token);
   }
 }
