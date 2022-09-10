@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { getTimeStamp } from '../util/function';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Like, Repository } from 'typeorm';
 import { Resource } from './resource.entity';
 
 @Injectable()
@@ -43,5 +43,33 @@ export class ResourceService {
     const data = await this.resourceRepository.findOneBy({ rid });
     data.downloads += 1;
     await this.resourceRepository.save(data);
+  }
+
+  /**
+   * 按列表查询
+   * @param skip 开始页
+   * @param take 到第几页
+   * @returns 返回一个资源数组
+   */
+  async getResourceList(skip: number, take: number, keyword: string) {
+    const rule = [
+      {
+        name: Like(`%${keyword}%`),
+      },
+      {
+        keywords: Like(`%${keyword}%`),
+      },
+    ];
+    const find: FindManyOptions<Resource> = {
+      skip,
+      take,
+    };
+
+    if (keyword) {
+      find.where = rule;
+    }
+    console.log(find, keyword, keyword, keyword?.length !== 0);
+    const data = await this.resourceRepository.find(find);
+    return data;
   }
 }

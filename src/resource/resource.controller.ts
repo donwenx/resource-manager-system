@@ -30,11 +30,32 @@ export class ResourceController {
   private readonly resourceService: ResourceService;
 
   @Get('/list')
-  async findAll(@Query('page') page: string): Promise<Resource[]> {
-    return [];
+  async findAll(
+    @RequestToken() token: Token,
+    @Query('skip')
+    skip: number,
+    @Query('take')
+    take: number,
+    @Query('keyword')
+    keyword: string,
+  ): Promise<{ data: Resource[]; size: number }> {
+    // console.log('skip:', skip, take);
+    const data = await this.resourceService.getResourceList(
+      skip,
+      take,
+      keyword,
+    );
+    return { data, size: data.length };
   }
 
-  @Post('/create')
+  /**
+   * 上传文件
+   * @param file 上传的文件
+   * @param createResourceDto 属性
+   * @param token token
+   * @returns 资源信息
+   */
+  @Post('/upload')
   @UseInterceptors(FileInterceptor('file'))
   async addResource(
     @UploadedFile() file,
