@@ -16,7 +16,7 @@ import { createReadStream, createWriteStream } from 'fs';
 import { join } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createFilePath, createNonceStr } from '../util/function';
-import { CreateResourceDto } from './resource.dto';
+import { CreateResourceDto, UpdateResourceDto } from './resource.dto';
 import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
 import { request } from 'http';
@@ -62,7 +62,7 @@ export class ResourceController {
     @Body() createResourceDto: CreateResourceDto,
     @RequestToken() token: Token,
   ) {
-    console.log(file);
+    // console.log(file);
     const fileName = Date.now() + createNonceStr(8);
     const filePath = `${fileName}-${file.originalname}`;
     const fileFull = createFilePath(filePath);
@@ -93,8 +93,8 @@ export class ResourceController {
     //   throw new Error('当前账号未登录，需登录后下载！')
     // }
 
-    console.log('rid', rid);
-    const data = await this.resourceService.getPathByRid(rid);
+    // console.log('rid', rid);
+    const data = await this.resourceService.getByRid(rid);
 
     if (data.state === 0) {
       throw new Error('文件不存在！');
@@ -109,7 +109,22 @@ export class ResourceController {
     return new StreamableFile(file);
   }
 
-  // 更新文件信息
-
-  // 删除文件state = 0；
+  /**
+   * 更新文件信息
+   * @param token token信息
+   * @param updateResourceDto 修改的参数
+   * @returns 修改的信息
+   */
+  @Post('/update')
+  async update(
+    @RequestToken() token: Token,
+    @Body() updateResourceDto: UpdateResourceDto,
+  ) {
+    const resource = await this.resourceService.getByRid(updateResourceDto.rid);
+    if (token.uid !== resource.uid) {
+      throw new Error('不能修改单前文件！');
+    }
+    const data = await this.resourceService.update(updateResourceDto);
+    return data;
+  }
 }

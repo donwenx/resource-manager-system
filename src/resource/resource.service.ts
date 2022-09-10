@@ -2,13 +2,16 @@ import { Injectable, Inject } from '@nestjs/common';
 import { getTimeStamp } from '../util/function';
 import { FindManyOptions, Like, Repository } from 'typeorm';
 import { Resource } from './resource.entity';
+import { User } from 'src/user/user.entity';
+import { Token } from 'src/token/token.entity';
+import { UpdateResourceDto } from './resource.dto';
 
 @Injectable()
 export class ResourceService {
   constructor(
     @Inject('RESOURCE_REPOSITORY')
     private readonly resourceRepository: Repository<Resource>,
-  ) {}
+  ) { }
 
   /**
    * 创建资源表
@@ -30,7 +33,7 @@ export class ResourceService {
    * @param rid 文件id
    * @returns 文件路径
    */
-  async getPathByRid(rid: number) {
+  async getByRid(rid: number) {
     const data = await this.resourceRepository.findOneBy({ rid });
     return data;
   }
@@ -68,8 +71,26 @@ export class ResourceService {
     if (keyword) {
       find.where = rule;
     }
-    console.log(find, keyword, keyword, keyword?.length !== 0);
+    // console.log(find, keyword, keyword, keyword?.length !== 0);
     const data = await this.resourceRepository.find(find);
     return data;
+  }
+
+  async update(data: UpdateResourceDto) {
+    const resource = await this.resourceRepository.findOneBy({ rid: data.rid });
+    if (data.name) {
+      resource.name = data.name;
+    }
+    if (data.img) {
+      resource.img = data.img;
+    }
+    if (data.state) {
+      resource.state = data.state;
+    }
+    if (data.keywords) {
+      resource.keywords = data.keywords;
+    }
+    console.log('resource:', data, resource);
+    return await this.resourceRepository.save(resource);
   }
 }

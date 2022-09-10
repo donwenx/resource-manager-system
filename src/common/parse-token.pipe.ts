@@ -13,9 +13,9 @@ export class ParseTokenPipe implements PipeTransform {
   private tokenService: TokenService;
 
   async transform(value: string, metadata: ArgumentMetadata) {
-    console.log('token:', value);
+    // console.log('token:', value);
     const data = await this.tokenService.getTokenInfo(value);
-    console.log('uid:', data);
+    // console.log('uid:', data);
 
     if (data === null) {
       throw new AppException(1, '用户未登录！');
