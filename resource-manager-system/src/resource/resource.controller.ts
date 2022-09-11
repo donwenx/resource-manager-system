@@ -127,4 +127,6 @@ export class ResourceController {
     const data = await this.resourceService.update(updateResourceDto);
     return data;
   }
+
+  // 文件权限
 }
