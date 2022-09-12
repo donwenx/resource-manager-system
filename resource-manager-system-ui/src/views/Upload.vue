@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <div>首页</div>
+    <div>upload</div>
   </Layout>
 </template>
 

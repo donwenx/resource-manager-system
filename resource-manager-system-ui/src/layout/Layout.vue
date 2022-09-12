@@ -14,17 +14,103 @@
         <div class="user-name">小玟同学</div>
       </div>
     </div>
-    <div class="sidebar">
-      
-    </div>
-    <div class="main">
-      <slot></slot>
+    <div class="content">
+      <div class="sidebar">
+        <el-menu
+          :default-active="sidebarActive"
+          class="sidebar-menu"
+          @open="handleOpen"
+          @close="handleClose"
+          unique-opened
+          router
+        >
+          <el-submenu :index="item.id" v-for="item in sidebar" :key="item.id">
+            <template slot="title">
+              <i :class="item.icon"></i>
+              <span>{{ item.title }}</span>
+            </template>
+            <el-menu-item
+              v-for="submenu in item.children"
+              :key="submenu.id"
+              :index="submenu.id"
+              >{{ submenu.title }}</el-menu-item
+            >
+          </el-submenu>
+        </el-menu>
+      </div>
+      <div class="main">
+        <el-card class="breadcrumb-card">
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item >{{
+              breadcrumb.name
+            }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ breadcrumb.child }}</el-breadcrumb-item>
+          </el-breadcrumb>
+        </el-card>
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      sidebar: [
+        {
+          title: "资源管理",
+          id: "1",
+          icon: "el-icon-setting",
+          children: [
+            { title: "使用统计", id: "/" },
+            { title: "资源上传", id: "/upload" },
+            { title: "资源下载", id: "/download" },
+            { title: "资源列表", id: "/resourceList" },
+          ],
+        },
+        {
+          title: "用户管理",
+          id: "2",
+          icon: "el-icon-menu",
+          children: [{ title: "用户列表", id: "/userList" }],
+        },
+        {
+          title: "分类管理",
+          id: "3",
+          icon: "el-icon-document",
+          children: [{ title: "分类列表", id: "/category" }],
+        },
+      ],
+    };
+  },
+  methods: {
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+  },
+  computed: {
+    breadcrumb() {
+      const path = this.$route.path;
+      let name, child;
+      this.sidebar.forEach((item) => {
+        item.children.forEach((subItem) => {
+          if (subItem.id === path) {
+            child = subItem.title;
+            name = item.title;
+          }
+        });
+      });
+      return { name, child };
+    },
+    sidebarActive() {
+      return this.$route.path;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -67,6 +153,30 @@ export default {};
     .user-name {
       font-size: 16px;
       line-height: 16px;
+    }
+  }
+}
+.content {
+  display: flex;
+
+  .sidebar-menu {
+    width: 200px;
+    height: 100vh;
+    background: #ffffff;
+    /* box-shadow-light */
+
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
+  }
+  .main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 20px 24px;
+
+    .breadcrumb-card {
+      width: 100%;
+      margin-bottom: 24px;
     }
   }
 }
