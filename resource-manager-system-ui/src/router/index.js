@@ -7,6 +7,7 @@ import Login from '../views/Login.vue'
 import ResourceList from '../views/ResourceList.vue'
 import Upload from '../views/Upload.vue'
 import UserList from '../views/UserList.vue'
+import Register from '../views/Register.vue'
 
 Vue.use(VueRouter)
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/userList',
     name: 'UserList',
     component: UserList,
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
   },
 ]
 

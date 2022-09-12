@@ -10,10 +10,10 @@
         class="ruleForm"
         label-position="left"
       >
-        <el-form-item label="ID" prop="id">
+        <el-form-item label="用户名" prop="name">
           <el-input
             prefix-icon="el-icon-user"
-            v-model="ruleForm.id"
+            v-model="ruleForm.name"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -28,11 +28,11 @@
         <el-form-item>
           <el-button
             class="button"
-            type="primary"
+            type="success"
             @click="submitForm('ruleForm2')"
-            >登录</el-button
+            >注册</el-button
           >
-          <el-button type="text" @click="resetForm()">注册</el-button>
+          <el-button type="text" @click="resetForm()">登录</el-button>
         </el-form-item>
       </el-form>
     </BrandCard>
@@ -46,10 +46,10 @@ export default {
     return {
       ruleForm: {
         pass: "",
-        id: "",
+        name: "",
       },
       rules: {
-        id: [{ required: true, message: "请输入id", trigger: "blur" }],
+        name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
         pass: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
@@ -66,7 +66,7 @@ export default {
       });
     },
     resetForm() {
-      this.$router.push("/register");
+      this.$router.push("/login");
     },
   },
   components: {
