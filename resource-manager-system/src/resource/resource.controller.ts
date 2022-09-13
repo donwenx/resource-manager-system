@@ -13,13 +13,11 @@ import {
 import { Resource } from './resource.entity';
 import { ResourceService } from './resource.service';
 import { createReadStream, createWriteStream } from 'fs';
-import { join } from 'path';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { createFilePath, createNonceStr } from '../util/function';
+import { createFilePath, sha256 } from '../util/function';
 import { CreateResourceDto, UpdateResourceDto } from './resource.dto';
 import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
-import { request } from 'http';
 import type { Response } from 'express';
 
 // 只实现业务逻辑
@@ -58,14 +56,16 @@ export class ResourceController {
   @Post('/upload')
   @UseInterceptors(FileInterceptor('file'))
   async addResource(
-    @UploadedFile() file,
+    @UploadedFile() file: Express.Multer.File,
     @Body() createResourceDto: CreateResourceDto,
     @RequestToken() token: Token,
   ) {
     // console.log(file);
-    const fileName = Date.now() + createNonceStr(8);
-    const filePath = `${fileName}-${file.originalname}`;
+    const fileName = file.originalname;
+    const filePath = sha256(file.buffer);
     const fileFull = createFilePath(filePath);
+    const mimeType = file.mimetype;
+    const size = file.size;
     const writeImage = createWriteStream(fileFull);
     writeImage.write(file.buffer);
     // return '上传成功';
@@ -76,6 +76,9 @@ export class ResourceController {
       token.uid,
       createResourceDto.name,
       filePath,
+      fileName,
+      mimeType,
+      size,
     );
   }
 
@@ -86,7 +89,7 @@ export class ResourceController {
    */
   @Get('/download')
   async download(
-    @Query() rid: number,
+    @Query('rid') rid: number,
     @Res({ passthrough: true }) res: Response,
   ) {
     // if(){
@@ -103,7 +106,8 @@ export class ResourceController {
     const filePath = createFilePath(path);
     const file = createReadStream(filePath);
     res.set({
-      'Content-Disposition': `attachment; filename= "${path}"`,
+      'Content-Disposition': `attachment; filename= "${data.originalName}"`,
+      'Content-Type': data.mimeType,
     });
     await this.resourceService.updateDownloadCount(rid);
     return new StreamableFile(file);

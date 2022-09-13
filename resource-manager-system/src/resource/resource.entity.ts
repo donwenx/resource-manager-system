@@ -11,6 +11,15 @@ export class Resource {
   @Column({ length: 255, type: 'varchar' })
   name: string;
 
+  @Column({ length: 255, type: 'varchar' })
+  originalName: string;
+
+  @Column({ type: 'int' })
+  size: number;
+
+  @Column({ length: 255, type: 'varchar' })
+  mimeType: string;
+
   @Column({ length: 255, type: 'varchar', default: '' })
   keywords: string;
 

@@ -20,12 +20,22 @@ export class ResourceService {
    * @param path 上传路径
    * @returns 创建成功
    */
-  async createResource(uid: number, name: string, path: string) {
+  async createResource(
+    uid: number,
+    name: string,
+    path: string,
+    originalName: string,
+    mimeType: string,
+    size: number,
+  ) {
     const data = new Resource();
     data.uid = uid;
     data.name = name;
     data.time = getTimeStamp();
     data.path = path;
+    data.originalName = originalName;
+    data.mimeType = mimeType;
+    data.size = size;
     return await this.resourceRepository.save(data);
   }
 
