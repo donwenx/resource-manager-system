@@ -1,10 +1,10 @@
-import { createConnection } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
     provide: 'DATABASE_CONNECTION',
-    useFactory: async () =>
-      await createConnection({
+    useFactory: async () => {
+      const dataSource = new DataSource({
         type: 'mysql',
         host: 'localhost',
         port: 3306,
@@ -13,6 +13,10 @@ export const databaseProviders = [
         database: 'egg-resource-manager',
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
-      }),
+        logging: true,
+      });
+      await dataSource.initialize();
+      return dataSource.manager;
+    },
   },
 ];
