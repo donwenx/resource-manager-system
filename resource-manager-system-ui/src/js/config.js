@@ -14,6 +14,10 @@ export const API = {
   LOGIN_USER:  {
     method: 'POST',
     url: '/api/user/login',
+  },
+  UPLOAD_FILE: {
+    method: 'POST',
+    url: '/api/resource/upload',
   }
 };
 
