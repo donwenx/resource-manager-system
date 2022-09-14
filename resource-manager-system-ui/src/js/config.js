@@ -9,8 +9,14 @@ export const DEFAULT_HOST = (process.env.VUE_APP_HOSTS || '').length > 0 ? proce
 export const API = {
   CREATE_USER: {
     method: 'POST',
-    path: '/user/create',
+    url: '/api/user/create',
   },
+  LOGIN_USER:  {
+    method: 'POST',
+    url: '/api/user/login',
+  }
 };
+
+export const TOKEN = 'token';
 
 export const HTTP_TIMEOUT = 30000;

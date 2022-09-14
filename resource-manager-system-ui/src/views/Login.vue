@@ -17,11 +17,11 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
+        <el-form-item label="密码" prop="password">
           <el-input
             prefix-icon="el-icon-lock"
             type="password"
-            v-model="ruleForm.pass"
+            v-model="ruleForm.password"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -41,24 +41,31 @@
 
 <script>
 import BrandCard from "@/components/BrandCard.vue";
+import { login } from "@/js/service.js";
 export default {
   data() {
     return {
       ruleForm: {
-        pass: "",
         id: "",
+        password: "",
       },
       rules: {
         id: [{ required: true, message: "请输入id", trigger: "blur" }],
-        pass: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate( async (valid) => {
         if (valid) {
-          alert("submit!");
+          const data = {
+            uid: this.ruleForm.id,
+            password: this.ruleForm.password,
+          };
+          const res = await login(data);
+          this.$router.push('/');
+          console.log(res);
         } else {
           console.log("error submit!!");
           return false;
