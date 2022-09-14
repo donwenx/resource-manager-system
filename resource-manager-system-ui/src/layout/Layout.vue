@@ -173,6 +173,7 @@ export default {
     align-items: center;
     width: 100%;
     padding: 20px 24px;
+    background: #F0F2F5;
 
     .breadcrumb-card {
       width: 100%;

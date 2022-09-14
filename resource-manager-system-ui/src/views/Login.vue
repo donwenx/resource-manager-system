@@ -29,7 +29,7 @@
           <el-button
             class="button"
             type="primary"
-            @click="submitForm('ruleForm2')"
+            @click="submitForm('ruleForm')"
             >登录</el-button
           >
           <el-button type="text" @click="resetForm()">注册</el-button>
@@ -71,6 +71,9 @@ export default {
   },
   components: {
     BrandCard,
+  },
+  created() {
+    this.ruleForm.id = this.$route.query.id;
   },
 };
 </script>

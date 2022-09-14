@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="register">
     <BrandCard>
       <el-form
         :model="ruleForm"
@@ -17,11 +17,11 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="pass">
+        <el-form-item label="密码" prop="password">
           <el-input
             prefix-icon="el-icon-lock"
             type="password"
-            v-model="ruleForm.pass"
+            v-model="ruleForm.password"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -29,7 +29,7 @@
           <el-button
             class="button"
             type="success"
-            @click="submitForm('ruleForm2')"
+            @click="submitForm('ruleForm')"
             >注册</el-button
           >
           <el-button type="text" @click="resetForm()">登录</el-button>
@@ -41,24 +41,35 @@
 
 <script>
 import BrandCard from "@/components/BrandCard.vue";
+import { register } from "@/js/service.js";
 export default {
   data() {
     return {
       ruleForm: {
-        pass: "",
+        password: "",
         name: "",
       },
       rules: {
         name: [{ required: true, message: "请输入用户名", trigger: "blur" }],
-        pass: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
       },
     };
   },
   methods: {
     submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          alert("submit!");
+          const res = await register(this.ruleForm);
+          if (res.code === 0) {
+            this.$router.push({
+              name: "login",
+              query: { id: res.data },
+            });
+          }
+          this.$message({
+          message: '恭喜你，你已经注册成功了!',
+          type: 'success'
+        });
         } else {
           console.log("error submit!!");
           return false;
@@ -76,7 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.login {
+.register {
   display: flex;
   justify-content: center;
   align-items: center;

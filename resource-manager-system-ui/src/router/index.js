@@ -14,7 +14,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
   },
   {
@@ -24,32 +24,32 @@ const routes = [
   },
   {
     path: '/download',
-    name: 'Download',
+    name: 'download',
     component: Download,
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: Login,
   },
   {
     path: '/resourceList',
-    name: 'ResourceList',
+    name: 'resourceList',
     component: ResourceList,
   },
   {
     path: '/upload',
-    name: 'Upload',
+    name: 'upload',
     component: Upload,
   },
   {
     path: '/userList',
-    name: 'UserList',
+    name: 'userList',
     component: UserList,
   },
   {
     path: '/register',
-    name: 'Register',
+    name: 'register',
     component: Register,
   },
 ]
