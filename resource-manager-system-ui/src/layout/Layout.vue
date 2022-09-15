@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="layout">
     <div class="head">
       <div class="logo">
         <div class="head-img">
@@ -114,10 +114,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.layout {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .head {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-grow: 0;
   height: 48px;
   padding: 0 16px;
 
@@ -158,10 +165,10 @@ export default {
 }
 .content {
   display: flex;
-
+  flex-grow: 1;
   .sidebar-menu {
     width: 200px;
-    height: 100vh;
+    height: 100%;
     background: #ffffff;
     /* box-shadow-light */
 
@@ -175,6 +182,8 @@ export default {
     padding: 20px 24px;
     background: #F0F2F5;
 
+    overflow-y: auto;
+    overflow-x: hidden;
     .breadcrumb-card {
       width: 100%;
       margin-bottom: 24px;

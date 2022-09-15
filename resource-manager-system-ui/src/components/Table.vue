@@ -5,57 +5,59 @@
       <el-input
         placeholder="请输入内容"
         prefix-icon="el-icon-search"
-        v-model="input2"
+        v-model="keyword"
       >
       </el-input>
-      <el-button type="primary">搜索</el-button>
+      <el-button type="primary" @click="handleSearchChange">搜索</el-button>
     </div>
     <div class="main">
       <el-table stripe :data="tableData" style="width: 100%">
         <el-table-column label="资源名称" width="180">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{ scope.row.name }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="上传时间" width="180">
+        <el-table-column label="上传时间" width="200">
           <template slot-scope="scope">
             <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{
+              dateFormat(scope.row.time)
+            }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="关键字" width="180">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{ scope.row.keyword }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="下载量" width="180">
           <template slot-scope="scope">
             <i class="el-icon-download"></i>
-            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+            <span style="margin-left: 10px">{{ scope.row.downloads }}</span>
           </template>
         </el-table-column>
 
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
-              v-if="true"
+              v-if="isDownload"
               size="mini"
               type="success"
               @click="handleDownLoad(scope.$index, scope.row)"
               >下载</el-button
             >
             <el-button
-              v-if="true"
+              v-if="!isDownload"
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >
             <el-button
-              v-if="true"
+              v-if="!isDownload"
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
@@ -66,13 +68,14 @@
       </el-table>
       <div class="table-pagination">
         <el-pagination
+          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page.sync="currentPage2"
+          :current-page.sync="currentPage"
           :page-sizes="[5, 10, 15, 20]"
-          :page-size="100"
+          :page-size="pageSize"
           layout="sizes, prev, pager, next"
-          :total="100"
+          :total="totalPage"
         >
         </el-pagination>
       </div>
@@ -106,32 +109,17 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
+  props: {
+    tableData: Array,
+    isDownload: Boolean,
+    pageSize: Number,
+    totalPage: Number,
+  },
   data() {
     return {
-      input2: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+      keyword: "",
       dialogFormVisible: false,
       form: {
         name: "",
@@ -144,12 +132,13 @@ export default {
         desc: "",
       },
       formLabelWidth: "120px",
-      currentPage2: 5,
+      currentPage: 1,
     };
   },
   methods: {
     handleDownLoad(index, row) {
-      console.log("handleDownLoad", index, row);
+      // console.log("handleDownLoad", index, row);
+      this.$emit("handleDownLoad", row);
     },
     handleEdit(index, row) {
       console.log(index, row);
@@ -160,10 +149,18 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
+      this.$emit("sizeChange", val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      this.$emit("currentChange", val);
       console.log(`当前页: ${val}`);
+    },
+    handleSearchChange() {
+      this.$emit("searchChange", this.keyword);
+    },
+    dateFormat(time) {
+      return moment(time * 1000).format('YYYY-MM-DD hh:mm:ss');
     },
   },
 };

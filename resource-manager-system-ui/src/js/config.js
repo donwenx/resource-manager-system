@@ -18,7 +18,15 @@ export const API = {
   UPLOAD_FILE: {
     method: 'POST',
     url: '/api/resource/upload',
-  }
+  },
+  RESOURCE_LIST: {
+    method: 'GET',
+    url: '/api/resource/list',
+  },
+  RESOURCE_DOWNLOAD: {
+    method: 'GET',
+    url: '/api/resource/download',
+  },
 };
 
 export const TOKEN = 'token';

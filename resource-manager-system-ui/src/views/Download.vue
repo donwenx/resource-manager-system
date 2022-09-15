@@ -2,7 +2,16 @@
   <Layout>
     <div class="download">
       <el-card>
-        <Table></Table>
+        <Table
+          :tableData="tableData"
+          :isDownload="true"
+          :pageSize="pageSize"
+          @handleDownLoad="handleDownLoad"
+          @sizeChange="handleSizeChange"
+          @currentChange="handleCurrentChange"
+          :totalPage="totalPage"
+          @searchChange="handleSearchChange"
+        ></Table>
       </el-card>
     </div>
   </Layout>
@@ -11,6 +20,7 @@
 <script>
 import Layout from "../layout/Layout.vue";
 import Table from "@/components/Table.vue";
+import { resourceList } from "@/js/service.js";
 export default {
   components: {
     Layout,
@@ -18,19 +28,48 @@ export default {
   },
   data() {
     return {
-      downloadInfo: {
-        title: '资源搜索',
-        tableInfo: {
-          name: [
-            '资源名称',
-            '上传时间',
-            '关键字',
-            '下载量',
-            '操作',
-          ]
-        }
-      }
+      tableData: [],
+      pageSize: 5,
+      currentPage: 1,
+      totalPage: 100,
+      keyword: '',
     };
+  },
+  async created() {
+    this.createResourceList();
+  },
+  methods: {
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.createResourceList();
+    },
+    async createResourceList() {
+      // 计算开始页 = 单前页码 * 每页多少条
+      const skip = (this.currentPage - 1) * this.pageSize;
+      // 取多少条数据
+      const take = this.pageSize;
+      const keyword = this.keyword;
+      const data = {
+        skip,
+        take,
+        keyword
+      };
+      const res = await resourceList(data);
+      this.tableData = res.data;
+      console.log("resourceList", this.tableData);
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.createResourceList();
+    },
+    handleSearchChange(keyword) {
+      this.keyword = keyword;
+      this.createResourceList();
+    },
+    handleDownLoad(row) {
+      // console.log("下载", row.rid);
+      window.location.href = `/api/resource/download?rid=${row.rid}`;
+    },
   },
 };
 </script>

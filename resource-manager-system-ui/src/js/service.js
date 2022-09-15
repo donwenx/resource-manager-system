@@ -48,3 +48,31 @@ export const upload = async (data) => {
     console.error(err);
   }
 }
+
+export const resourceList = async (data) => {
+  try {
+    const token = window.localStorage.getItem(TOKEN);
+    const response = await axios({
+      ...API.RESOURCE_LIST,
+      params: data,
+      headers: { 'token': token },
+    })
+    return response.data.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export const resourceDownload = async (data) => {
+  try {
+    // const token = window.localStorage.getItem(TOKEN);
+    await axios({
+      ...API.RESOURCE_DOWNLOAD,
+      params: data,
+      // headers: { 'token': token },
+    })
+    // return response.data;
+  } catch(err){
+    console.error(err);
+  }
+}
