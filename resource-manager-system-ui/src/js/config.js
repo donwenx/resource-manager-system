@@ -11,7 +11,7 @@ export const API = {
     method: 'POST',
     url: '/api/user/create',
   },
-  LOGIN_USER:  {
+  LOGIN_USER: {
     method: 'POST',
     url: '/api/user/login',
   },
@@ -30,6 +30,10 @@ export const API = {
   RESOURCE_DOWNLOAD: {
     method: 'GET',
     url: '/api/resource/download',
+  },
+  RESOURCE_UPDATE: {
+    method: 'POST',
+    url: '/api/resource/update',
   },
 };
 

@@ -9,7 +9,7 @@ axios.interceptors.request.use(function (config) {
   if(token) {
     config.headers.token = token || '';
   }
-  console.log('config.headers.token', token);
+  // console.log('config.headers.token', token);
   return config;
 }, function (error) {
   // 对请求错误做些什么
@@ -24,7 +24,7 @@ axios.interceptors.response.use((response) => {
   if(code === 1) {
     router.push('/login');
   }
-  console.log('response', response)
+  // console.log('response', response)
   return response;
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。
@@ -109,6 +109,18 @@ export const resourceDownload = async (data) => {
       // headers: { 'token': token },
     })
     // return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+export const resourceUpdate = async (data) => {
+  try {
+    const response = await axios({
+      ...API.RESOURCE_UPDATE,
+      data,
+    })
+    return response;
   } catch (err) {
     console.error(err);
   }

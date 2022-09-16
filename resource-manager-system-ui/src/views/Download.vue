@@ -32,7 +32,7 @@ export default {
       pageSize: 5,
       currentPage: 1,
       totalPage: 100,
-      keyword: '',
+      keyword: "",
     };
   },
   async created() {
@@ -52,7 +52,7 @@ export default {
       const data = {
         skip,
         take,
-        keyword
+        keyword,
       };
       const res = await resourceList(data);
       this.tableData = res.data;
@@ -66,9 +66,12 @@ export default {
       this.keyword = keyword;
       this.createResourceList();
     },
-    handleDownLoad(row) {
+    async handleDownLoad(row) {
       // console.log("下载", row.rid);
       window.location.href = `/api/resource/download?rid=${row.rid}`;
+      setTimeout(() => {
+        this.createResourceList();
+      }, 1000);
     },
   },
 };

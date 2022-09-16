@@ -29,7 +29,7 @@
 
         <el-table-column label="关键字" width="180">
           <template slot-scope="scope">
-            <span style="margin-left: 10px">{{ scope.row.keyword }}</span>
+            <span style="margin-left: 10px">{{ scope.row.keywords }}</span>
           </template>
         </el-table-column>
 
@@ -88,18 +88,12 @@
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="关键字" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="活动区域" :label-width="formLabelWidth">
-            <el-select v-model="form.region" placeholder="请选择活动区域">
-              <el-option label="区域一" value="shanghai"></el-option>
-              <el-option label="区域二" value="beijing"></el-option>
-            </el-select>
+            <el-input v-model="form.keywords" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"
+          <el-button type="primary" @click="handleEditUpdate()"
             >确 定</el-button
           >
         </div>
@@ -123,16 +117,13 @@ export default {
       dialogFormVisible: false,
       form: {
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: "",
+        img: '',
+        state: 1,
+        keywords: '',
       },
       formLabelWidth: "120px",
       currentPage: 1,
+      rid: 0,
     };
   },
   methods: {
@@ -141,11 +132,24 @@ export default {
       this.$emit("handleDownLoad", row);
     },
     handleEdit(index, row) {
-      console.log(index, row);
+      console.log(index, row.rid);
+      // 每次点编辑就保存一下rid
+      this.rid = row.rid;
       this.dialogFormVisible = true;
     },
     handleDelete(index, row) {
-      console.log(index, row);
+      // console.log(index, row.rid);
+      this.$emit('handleDelete', row.rid);
+    },
+    // 编辑文件
+    handleEditUpdate(){
+      this.dialogFormVisible = false;
+      const data = {
+        rid: this.rid,
+        ...this.form,
+      };
+      // console.log(data);
+      this.$emit('handleEditUpdate',data);
     },
     // 分页
     handleSizeChange(val) {
