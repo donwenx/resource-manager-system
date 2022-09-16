@@ -89,6 +89,11 @@ export class ResourceService {
     return data;
   }
 
+  async getResourceListCount() {
+    const count = await this.resourceRepository.count({ where: { state: 1 } });
+    return count;
+  }
+
   async update(data: UpdateResourceDto) {
     const resource = await this.resourceRepository.findOneBy({ rid: data.rid });
     if (data.name) {
