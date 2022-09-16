@@ -1,4 +1,4 @@
-import { API, TOKEN } from '@/js/config';
+import { API, TOKEN, USER_INFO } from '@/js/config';
 import axios from 'axios';
 import router from '@/router/index.js'
 
@@ -57,8 +57,10 @@ export const login = async (data) => {
         password: data.password,
       }
     })
+    const userInfo = JSON.stringify(response.data.data);
     console.log(response);
-    window.localStorage.setItem(TOKEN, response.data.data);
+    window.localStorage.setItem(TOKEN, response.data.data.token);
+    window.localStorage.setItem(USER_INFO, userInfo);
     return response.data;
   } catch (err) {
     console.error(err);

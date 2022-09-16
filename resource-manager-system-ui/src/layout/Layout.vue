@@ -11,7 +11,7 @@
         <div class="user-icon">
           <img src="@/assets/user-icon.svg" />
         </div>
-        <div class="user-name">小玟同学</div>
+        <div class="user-name">{{userInfo.name}}（ID：{{userInfo.uid}}）</div>
         <el-link
           class="logout"
           type="primary"
@@ -60,6 +60,7 @@
 
 <script>
 import { logout } from "@/js/service.js";
+import { USER_INFO } from '@/js/config.js'
 export default {
   data() {
     return {
@@ -88,7 +89,11 @@ export default {
           children: [{ title: "分类列表", id: "/category" }],
         },
       ],
+      userInfo: {},
     };
+  },
+  created() {
+    this.userInfo = this.getUserInfo();
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -105,6 +110,10 @@ export default {
       });
       this.$router.push('/login');
       console.log("退出登录");
+    },
+    getUserInfo() {
+      const userInfo = window.localStorage.getItem(USER_INFO);
+      return JSON.parse(userInfo);
     },
   },
   computed: {

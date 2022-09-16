@@ -9,7 +9,7 @@
           @handleDownLoad="handleDownLoad"
           @sizeChange="handleSizeChange"
           @currentChange="handleCurrentChange"
-          :totalPage="totalPage"
+          :totalPage="count"
           @searchChange="handleSearchChange"
         ></Table>
       </el-card>
@@ -31,7 +31,7 @@ export default {
       tableData: [],
       pageSize: 5,
       currentPage: 1,
-      totalPage: 100,
+      count: 0,
       keyword: "",
     };
   },
@@ -56,6 +56,7 @@ export default {
       };
       const res = await resourceList(data);
       this.tableData = res.data;
+      this.count = res.count;
       console.log("resourceList", this.tableData);
     },
     handleCurrentChange(val) {
