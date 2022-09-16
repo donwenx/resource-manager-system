@@ -65,6 +65,18 @@ export const login = async (data) => {
   }
 }
 
+export const logout = async () => {
+  try{
+    const response = await axios({
+      ...API.LOGOUT_USER,
+    })
+    window.localStorage.removeItem(TOKEN);
+    console.log(response);
+  } catch(err) {
+    console.error(err)
+  }
+}
+
 export const upload = async (data) => {
   try {
     const response = await axios({

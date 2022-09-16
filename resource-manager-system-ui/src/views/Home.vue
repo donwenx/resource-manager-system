@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <div class="home">
-      <el-card class="list" v-for="item in statistics" :key="item">
+      <el-card class="list" v-for="item in statistics" :key="item.id">
         <div slot="header" class="header">{{item.title}}</div>
         <div class="content">
           <div class="left">

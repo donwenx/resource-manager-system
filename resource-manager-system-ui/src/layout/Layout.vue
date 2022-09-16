@@ -12,6 +12,13 @@
           <img src="@/assets/user-icon.svg" />
         </div>
         <div class="user-name">小玟同学</div>
+        <el-link
+          class="logout"
+          type="primary"
+          :underline="false"
+          @click="logout"
+          >退出登录</el-link
+        >
       </div>
     </div>
     <div class="content">
@@ -41,9 +48,7 @@
       <div class="main">
         <el-card class="breadcrumb-card">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item >{{
-              breadcrumb.name
-            }}</el-breadcrumb-item>
+            <el-breadcrumb-item>{{ breadcrumb.name }}</el-breadcrumb-item>
             <el-breadcrumb-item>{{ breadcrumb.child }}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-card>
@@ -54,6 +59,7 @@
 </template>
 
 <script>
+import { logout } from "@/js/service.js";
 export default {
   data() {
     return {
@@ -90,6 +96,15 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    logout() {
+      logout();
+      this.$message({
+        message: "退出登录成功！",
+        type: "success",
+      });
+      this.$router.push('/login');
+      console.log("退出登录");
     },
   },
   computed: {
@@ -161,6 +176,11 @@ export default {
       font-size: 16px;
       line-height: 16px;
     }
+    .logout {
+      font-size: 16px;
+      line-height: 16px;
+      margin-left: 16px;
+    }
   }
 }
 .content {
@@ -180,7 +200,7 @@ export default {
     align-items: center;
     width: 100%;
     padding: 20px 24px;
-    background: #F0F2F5;
+    background: #f0f2f5;
 
     overflow-y: auto;
     overflow-x: hidden;
