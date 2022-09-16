@@ -38,6 +38,16 @@ export class UserService {
   }
 
   /**
+   * 通过uid获取用户name
+   * @param uid 获取用户id
+   * @returns 用户name
+   */
+  async getUserName(uid: number) {
+    const user = await this.userRepository.findOneBy({ uid });
+    return user.name;
+  }
+
+  /**
    * 更新用户信息
    * @param data 用户需要修改的信息
    * @returns 修改后结果

@@ -1,5 +1,6 @@
 export class LoginDto {
   readonly uid: number;
+  readonly name: string;
   readonly password: string;
 }
 

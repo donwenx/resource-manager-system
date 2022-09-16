@@ -33,7 +33,13 @@ export class UserController {
       loginDto.password,
     );
     if (ok) {
-      return this.tokenService.createToken(loginDto.uid, 2 * 60 * 60);
+      const token = await this.tokenService.createToken(
+        loginDto.uid,
+        2 * 60 * 60,
+      );
+      const name = await this.userService.getUserName(loginDto.uid);
+      const data = { token, uid: loginDto.uid, name };
+      return data;
     }
     // 密码错误，返回state = 1；
     throw new Error('密码错误，登录失败');
