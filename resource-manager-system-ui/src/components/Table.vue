@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div slot="head" class="table-head">
+    <div class="table-head">
       <div class="title">资源搜索</div>
       <el-input
         placeholder="请输入内容"

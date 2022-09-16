@@ -19,6 +19,10 @@ export const API = {
     method: 'POST',
     url: '/api/user/logout'
   },
+  USER_INFO_LIST: {
+    method: 'GET',
+    url: '/api/user/list'
+  },
   UPLOAD_FILE: {
     method: 'POST',
     url: '/api/resource/upload',

@@ -91,6 +91,18 @@ export const upload = async (data) => {
   }
 }
 
+export const userInfoList = async (data) => {
+  try{
+    const response = await axios({
+      ...API.USER_INFO_LIST,
+      params: data,
+    })
+    return response.data;
+  } catch(err) {
+    console.error(err);
+  }
+}
+
 export const resourceList = async (data) => {
   try {
     const response = await axios({
