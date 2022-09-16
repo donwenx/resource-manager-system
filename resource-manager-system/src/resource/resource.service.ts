@@ -68,15 +68,18 @@ export class ResourceService {
     const rule = [
       {
         name: Like(`%${keyword}%`),
+        state: 1,
       },
       {
         keywords: Like(`%${keyword}%`),
+        state: 1,
       },
     ];
     const find: FindManyOptions<Resource> = {
       skip,
       take,
     };
+    find.where = [{ state: 1 }];
 
     if (keyword) {
       find.where = rule;
@@ -94,7 +97,7 @@ export class ResourceService {
     if (data.img) {
       resource.img = data.img;
     }
-    if (data.state) {
+    if (data.state !== undefined) {
       resource.state = data.state;
     }
     if (data.keywords) {
