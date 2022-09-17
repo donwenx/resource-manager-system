@@ -36,15 +36,14 @@ export class ResourceController {
     take: number,
     @Query('keyword')
     keyword: string,
-  ): Promise<{ data: Resource[]; size: number, count: number }> {
+  ): Promise<{ data: Resource[]; size: number; count: number }> {
     // console.log('skip:', skip, take);
-    const data = await this.resourceService.getResourceList(
+    const [data, count] = await this.resourceService.getResourceList(
       skip,
       take,
       keyword,
     );
-    const count = await this.resourceService.getResourceListCount();
-    return { data, size: data.length, count: count };
+    return { data, size: data.length, count };
   }
 
   /**

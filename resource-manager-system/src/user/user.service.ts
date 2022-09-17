@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Like, Repository } from 'typeorm';
 import { UpdateUserDto } from './user.dto';
 import { User } from './user.entity';
 // 用于数据处理操作、或者创建token可以在这里实现
@@ -9,7 +9,7 @@ export class UserService {
   constructor(
     @Inject('USER_REPOSITORY')
     private readonly userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   /**
    * 注册用户
@@ -70,5 +70,25 @@ export class UserService {
       user.password = data.password;
     }
     return await this.userRepository.save(user);
+  }
+
+  async getUserList(skip: number, take: number, keyword: string) {
+    const rule = [
+      {
+        name: Like(`%${keyword}%`),
+        state: 1,
+      },
+    ];
+    const find: FindManyOptions<User> = {
+      skip,
+      take,
+    };
+    find.where = [{ state: 1 }];
+
+    if (keyword) {
+      find.where = rule;
+    }
+    const data = await this.userRepository.findAndCount(find);
+    return data;
   }
 }

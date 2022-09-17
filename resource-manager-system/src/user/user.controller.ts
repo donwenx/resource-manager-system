@@ -63,5 +63,28 @@ export class UserController {
     return data;
   }
 
+  @Get('/list')
+  async findAll(
+    @RequestToken() token: Token,
+    @Query('skip')
+    skip: number,
+    @Query('take')
+    take: number,
+    @Query('keyword')
+    keyword: string,
+  ): Promise<{ data: User[]; size: number; count: number }> {
+    // console.log('skip:', skip, take);
+    const [data, count] = await this.userService.getUserList(
+      skip,
+      take,
+      keyword,
+    );
+    const userInfo = data.map((item) => {
+      item.password = '';
+      return item;
+    });
+    return { data: userInfo, size: data.length, count };
+  }
+
   // 设置超级管理员
 }

@@ -85,7 +85,7 @@ export class ResourceService {
       find.where = rule;
     }
     // console.log(find, keyword, keyword, keyword?.length !== 0);
-    const data = await this.resourceRepository.find(find);
+    const data = await this.resourceRepository.findAndCount(find);
     return data;
   }
 
