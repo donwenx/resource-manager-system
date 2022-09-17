@@ -1,6 +1,7 @@
 import { API, TOKEN, USER_INFO } from '@/js/config';
 import axios from 'axios';
 import router from '@/router/index.js'
+import { Message } from 'element-ui';
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -23,6 +24,13 @@ axios.interceptors.response.use((response) => {
   const code = response.data.code;
   if(code === 1) {
     router.push('/login');
+  }
+
+  if(code !== 0) {
+    Message({
+      message: response.data.message,
+      type: 'error'
+    });
   }
   // console.log('response', response)
   return response;
@@ -96,6 +104,30 @@ export const userInfoList = async (data) => {
     const response = await axios({
       ...API.USER_INFO_LIST,
       params: data,
+    })
+    return response.data;
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export const userUpdate = async (data) => {
+  try {
+    const response = await axios({
+      ...API.USER_UPDATE,
+      data,
+    })
+    return response.data;
+  } catch(err) {
+    console.error(err);
+  }
+}
+
+export const supUserUpdate = async (data) => {
+  try {
+    const response = await axios({
+      ...API.SUP_USER_UPDATE,
+      data,
     })
     return response.data;
   } catch(err) {

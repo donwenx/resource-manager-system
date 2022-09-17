@@ -25,6 +25,12 @@
             </template>
           </el-table-column>
 
+          <el-table-column label="性别" width="180">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{ scope.row.sex }}</span>
+            </template>
+          </el-table-column>
+
           <el-table-column label="权限" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{ scope.row.authority }}</span>
@@ -63,13 +69,44 @@
         </div>
       </div>
     </el-card>
+    <div class="table-dialog">
+      <el-dialog title="资源文件" :visible.sync="dialogFormVisible">
+        <el-form :model="form" label-position="left">
+          <el-form-item label="用户名称" :label-width="formLabelWidth">
+            <el-input v-model="form.name" autocomplete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="性别" :label-width="formLabelWidth">
+            <el-select v-model="form.sex" placeholder="请选择">
+              <el-option label="男" value="男"></el-option>
+              <el-option label="女" value="女"></el-option>
+              <el-option label="未知" value="未知"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="权限" :label-width="formLabelWidth">
+            <el-select v-model="form.authority" placeholder="请选择">
+              <el-option label="超级管理员" value="超级管理员"></el-option>
+              <el-option label="普通用户" value="普通用户"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="密码" :label-width="formLabelWidth">
+            <el-input v-model="form.password" autocomplete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleEditUpdate()"
+            >确 定</el-button
+          >
+        </div>
+      </el-dialog>
+    </div>
   </Layout>
 </template>
 
 <script>
 import Layout from "../layout/Layout.vue";
 import moment from "moment";
-import { userInfoList } from "@/js/service.js";
+import { userInfoList, supUserUpdate } from "@/js/service.js";
 export default {
   components: {
     Layout,
@@ -80,14 +117,16 @@ export default {
       dialogFormVisible: false,
       form: {
         name: "",
-        img: "",
+        sex: "",
+        authority: "",
+        password: "",
         state: 1,
+        uid: 0,
       },
       formLabelWidth: "120px",
       currentPage: 1,
       count: 0,
       pageSize: 5,
-      rid: 0,
       tableData: [],
     };
   },
@@ -109,27 +148,37 @@ export default {
       const res = await userInfoList(data);
       this.tableData = res.data.data;
       this.count = res.data.count;
-      console.log(res);
+      // console.log(res);
     },
     handleEdit(index, row) {
       console.log(index, row.rid);
       // 每次点编辑就保存一下rid
-      this.rid = row.rid;
       this.dialogFormVisible = true;
+      this.form.uid = row.uid;
+      this.form.name = row.name;
+      this.form.sex = row.sex;
+      this.form.password = row.password;
+      this.form.authority = row.authority;
     },
     handleDelete(index, row) {
       // console.log(index, row.rid);
       this.$emit("handleDelete", row.rid);
     },
     // 编辑文件
-    handleEditUpdate() {
+    async handleEditUpdate() {
       this.dialogFormVisible = false;
-      const data = {
-        rid: this.rid,
-        ...this.form,
-      };
+      const data = this.form;
       // console.log(data);
-      this.$emit("handleEditUpdate", data);
+      const res = await supUserUpdate(data);
+      console.log(res);
+      if (res.code === 0) {
+        this.$message({
+          message: "用户修改成功！",
+          type: "success",
+        });
+      }
+
+      this.getUserInfoList();
     },
     // 分页
     handleSizeChange(val) {

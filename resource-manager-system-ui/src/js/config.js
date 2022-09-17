@@ -23,6 +23,14 @@ export const API = {
     method: 'GET',
     url: '/api/user/list'
   },
+  USER_UPDATE: {
+    method: 'POST',
+    url: '/api/user/update',
+  },
+  SUP_USER_UPDATE: {
+    method: 'POST',
+    url: '/api/user/supUpdate',
+  },
   UPLOAD_FILE: {
     method: 'POST',
     url: '/api/resource/upload',
