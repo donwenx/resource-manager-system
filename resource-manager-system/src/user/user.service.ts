@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { FindManyOptions, Like, Repository } from 'typeorm';
-import { UpdateUserDto } from './user.dto';
+import { SupUpdateUserDto, UpdateUserDto } from './user.dto';
 import { User } from './user.entity';
 // 用于数据处理操作、或者创建token可以在这里实现
 // token: 1.根据uid创建token 2.根据token查询uid 3.过期token
@@ -42,9 +42,9 @@ export class UserService {
    * @param uid 获取用户id
    * @returns 用户name
    */
-  async getUserName(uid: number) {
+  async getUser(uid: number) {
     const user = await this.userRepository.findOneBy({ uid });
-    return user.name;
+    return user;
   }
 
   /**
@@ -68,6 +68,29 @@ export class UserService {
     }
     if (data.password) {
       user.password = data.password;
+    }
+    return await this.userRepository.save(user);
+  }
+
+  async supUpdate(data: SupUpdateUserDto) {
+    const user = await this.userRepository.findOneBy({ uid: data.uid });
+    if (data.name) {
+      user.name = data.name;
+    }
+    if (data.sex) {
+      user.sex = data.sex;
+    }
+    if (data.avatar) {
+      user.avatar = data.avatar;
+    }
+    if (data.state) {
+      user.state = data.state;
+    }
+    if (data.password) {
+      user.password = data.password;
+    }
+    if (data.authority) {
+      user.authority = data.authority;
     }
     return await this.userRepository.save(user);
   }

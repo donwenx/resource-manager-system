@@ -2,7 +2,12 @@ import { Body, Controller, Get, Inject, Post, Query } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { TokenService } from '../token/token.service';
-import { CreateUserDto, LoginDto, UpdateUserDto } from './user.dto';
+import {
+  CreateUserDto,
+  LoginDto,
+  UpdateUserDto,
+  SupUpdateUserDto,
+} from './user.dto';
 import { Token } from '../token/token.entity';
 import { RequestToken } from '../common/user.decorator';
 
@@ -37,8 +42,8 @@ export class UserController {
         loginDto.uid,
         2 * 60 * 60,
       );
-      const name = await this.userService.getUserName(loginDto.uid);
-      const data = { token, uid: loginDto.uid, name };
+      const user = await this.userService.getUser(loginDto.uid);
+      const data = { token, uid: loginDto.uid, name: user.name };
       return data;
     }
     // 密码错误，返回state = 1；
@@ -55,6 +60,7 @@ export class UserController {
     @RequestToken() token: Token,
     @Body() updateUserDto: UpdateUserDto,
   ) {
+    console.log('update', token.uid, updateUserDto.uid);
     if (token.uid !== updateUserDto.uid) {
       throw new Error('账号错误！');
     }
@@ -87,4 +93,28 @@ export class UserController {
   }
 
   // 设置超级管理员
+  @Post('/supUpdate')
+  async supUpdate(
+    @RequestToken() token: Token,
+    @Body() updateUserDto: SupUpdateUserDto,
+  ) {
+    const user = await this.userService.getUser(token.uid);
+    if (user.authority !== '超级管理员') {
+      throw new Error('你没有权限！');
+    }
+    if (
+      user.authority === '超级管理员' &&
+      updateUserDto.authority !== '超级管理员' &&
+      token.uid === updateUserDto.uid
+    ) {
+      throw new Error('你不能修改自己的权限！');
+    }
+    console.log('update', token.uid, updateUserDto.uid);
+    if (token.uid === updateUserDto.uid && updateUserDto.state === 0) {
+      throw new Error('不能删除自己！');
+    }
+    const data = await this.userService.supUpdate(updateUserDto);
+    data.password = '';
+    return data;
+  }
 }
