@@ -11,7 +11,7 @@ export class ResourceService {
   constructor(
     @Inject('RESOURCE_REPOSITORY')
     private readonly resourceRepository: Repository<Resource>,
-  ) { }
+  ) {}
 
   /**
    * 创建资源表
@@ -41,7 +41,7 @@ export class ResourceService {
 
   /**
    * @param rid 文件id
-   * @returns 文件路径
+   * @returns 文件
    */
   async getByRid(rid: number) {
     const data = await this.resourceRepository.findOneBy({ rid });

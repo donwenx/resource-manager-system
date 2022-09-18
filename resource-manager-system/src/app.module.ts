@@ -7,13 +7,17 @@ import { UserService } from './user/user.service';
 import { ResourceController } from './resource/resource.controller';
 import { ResourceModule } from './resource/resource.module';
 import { ResourceService } from './resource/resource.service';
+import { CategoryController } from './category/category.controller';
+import { CategoryModule } from './category/category.module';
+import { CategoryService } from './category/category.service';
 @Module({
-  imports: [UserModule, ResourceModule],
+  imports: [UserModule, ResourceModule, CategoryModule],
   controllers: [
     AppController,
     UserController,
     ResourceController,
+    CategoryController,
   ],
-  providers: [AppService, UserService, ResourceService],
+  providers: [AppService, UserService, ResourceService, CategoryService],
 })
 export class AppModule {}
