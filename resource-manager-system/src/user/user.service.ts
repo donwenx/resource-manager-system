@@ -38,9 +38,9 @@ export class UserService {
   }
 
   /**
-   * 通过uid获取用户name
+   * 通过uid获取用户信息
    * @param uid 获取用户id
-   * @returns 用户name
+   * @returns 用户信息
    */
   async getUser(uid: number) {
     const user = await this.userRepository.findOneBy({ uid });

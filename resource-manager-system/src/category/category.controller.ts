@@ -3,11 +3,15 @@ import { Token } from '../token/token.entity';
 import { RequestToken } from '../common/user.decorator';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
+import { UserService } from '../user/user.service';
 
 @Controller('/category')
 export class CategoryController {
   @Inject()
   private readonly categoryService: CategoryService;
+
+  @Inject()
+  private readonly userService: UserService;
 
   @Post('/create')
   async addCategory(
@@ -38,11 +42,15 @@ export class CategoryController {
     @RequestToken()
     token: Token,
   ) {
-    const uid = token.uid;
-    const category = await this.categoryService.getById(cid);
-    if (uid !== category.uid) {
-      throw new Error('只能修改自己的分类！');
+    const user = await this.userService.getUser(token.uid);
+    if (user.authority !== '超级管理员') {
+      throw new Error('只能超级管理员修改分类！');
     }
+    // const uid = token.uid;
+    // const category = await this.categoryService.getById(cid);
+    // if (uid !== category.uid) {
+    //   throw new Error('只能修改自己的分类！');
+    // }
 
     const data = { cid, name, state };
     return await this.categoryService.update(data);
