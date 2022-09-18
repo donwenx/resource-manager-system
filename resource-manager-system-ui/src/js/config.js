@@ -51,6 +51,19 @@ export const API = {
     method: 'GET',
     url: '/api/app/statistics',
   },
+  // 分类管理
+  CATEGORY_CREATE: {
+    method: 'POST',
+    url: '/api/category/create',
+  },
+  CATEGORY_LIST: {
+    method: 'GET',
+    url: '/api/category/list',
+  },
+  CATEGORY_UPDATE: {
+    method: 'POST',
+    url: '/api/category/update',
+  },
 };
 
 export const TOKEN = 'token';
