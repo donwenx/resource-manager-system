@@ -78,8 +78,8 @@
       </el-dialog>
 
       <el-dialog title="创建分类" :visible.sync="dialogCategoryCreateVisible">
-        <el-form :model="categoryForm" label-position="left">
-          <el-form-item label="分类名称" :label-width="formLabelWidth">
+        <el-form :rules="rules" :model="categoryForm" label-position="left">
+          <el-form-item label="分类名称" :label-width="formLabelWidth"  prop="name">
             <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -117,6 +117,9 @@ export default {
         name: "",
         state: 1,
         cid: 0,
+      },
+      rules: {
+        name: [{ required: true, message: "请输入分类名", trigger: "blur" }],
       },
       categoryForm: { // 创建分类的表单
         name: "",
