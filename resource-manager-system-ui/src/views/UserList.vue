@@ -161,8 +161,14 @@ export default {
       this.form.authority = row.authority;
     },
     handleDelete(index, row) {
-      // console.log(index, row.rid);
-      this.$emit("handleDelete", row.rid);
+      const data = { uid: row.uid, state: 2 };
+      supUserUpdate(data);
+      this.$message({
+        message: "用户删除成功！",
+        type: "success",
+      });
+      console.log("删除用户！", row.uid);
+      this.getUserInfoList();
     },
     // 编辑文件
     async handleEditUpdate() {
