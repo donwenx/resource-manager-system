@@ -33,6 +33,14 @@
           </template>
         </el-table-column>
 
+        <el-table-column label="分类名" width="100">
+          <template slot-scope="scope">
+            <span style="margin-left: 10px">{{
+              scope.row.category ? scope.row.category.name : ""
+            }}</span>
+          </template>
+        </el-table-column>
+
         <el-table-column label="下载量" width="180">
           <template slot-scope="scope">
             <i class="el-icon-download"></i>
@@ -84,7 +92,7 @@
     <div class="table-dialog">
       <el-dialog title="资源文件" :visible.sync="dialogFormVisible">
         <el-form :model="form" label-position="left">
-          <el-form-item label="文件名名称" :label-width="formLabelWidth">
+          <el-form-item label="文件名称" :label-width="formLabelWidth">
             <el-input v-model="form.name" autocomplete="off"></el-input>
           </el-form-item>
           <el-form-item label="关键字" :label-width="formLabelWidth">
@@ -117,9 +125,9 @@ export default {
       dialogFormVisible: false,
       form: {
         name: "",
-        img: '',
+        img: "",
         state: 1,
-        keywords: '',
+        keywords: "",
       },
       formLabelWidth: "120px",
       currentPage: 1,
@@ -139,17 +147,17 @@ export default {
     },
     handleDelete(index, row) {
       // console.log(index, row.rid);
-      this.$emit('handleDelete', row.rid);
+      this.$emit("handleDelete", row.rid);
     },
     // 编辑文件
-    handleEditUpdate(){
+    handleEditUpdate() {
       this.dialogFormVisible = false;
       const data = {
         rid: this.rid,
         ...this.form,
       };
       // console.log(data);
-      this.$emit('handleEditUpdate',data);
+      this.$emit("handleEditUpdate", data);
     },
     // 分页
     handleSizeChange(val) {
@@ -164,7 +172,7 @@ export default {
       this.$emit("searchChange", this.keyword);
     },
     dateFormat(time) {
-      return moment(time * 1000).format('YYYY-MM-DD hh:mm:ss');
+      return moment(time * 1000).format("YYYY-MM-DD hh:mm:ss");
     },
   },
 };
