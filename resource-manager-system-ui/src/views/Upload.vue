@@ -6,15 +6,31 @@
           <el-form
             label-position="left"
             label-width="80px"
-            :model="formLabelAlign"
+            :model="form"
             :rules="rules"
           >
-            <el-form-item label="文件分类">
-              <el-input v-model="formLabelAlign.type"></el-input>
+            <el-form-item label="文件分类"
+              ><el-select
+                v-model="form.cid"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入关键词"
+                :remote-method="remoteMethod"
+                :loading="loading"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.cid"
+                  :label="item.name"
+                  :value="item.cid"
+                >
+                </el-option>
+              </el-select>
             </el-form-item>
 
             <el-form-item label="文件名称" prop="name">
-              <el-input v-model="formLabelAlign.name"></el-input>
+              <el-input v-model="form.name"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -48,17 +64,19 @@
 
 <script>
 import Layout from "../layout/Layout.vue";
-import { upload } from "@/js/service.js";
+import { upload, getCategoryList } from "@/js/service.js";
 export default {
   components: {
     Layout,
   },
   data() {
     return {
-      formLabelAlign: {
+      form: {
         name: "",
-        type: "",
+        cid: "",
       },
+      options: [],
+      loading: false,
       rules: {
         name: [{ required: true, message: "请输入文件名", trigger: "blur" }],
       },
@@ -70,17 +88,42 @@ export default {
       const file = e.file;
       this.formData = new FormData();
       this.formData.append("file", file);
-      this.formLabelAlign.name = file.name;
+      this.form.name = file.name;
       // console.log("http-request", e);
     },
     async handleUpload() {
-      this.formData.append("name", this.formLabelAlign.name);
+      this.formData.append("name", this.form.name);
+      this.formData.append("cid", this.form.cid);
       const res = await upload(this.formData);
       console.log(res);
       this.$message({
         message: "文件上传成功！",
         type: "success",
       });
+    },
+    async remoteMethod(query) {
+      if (query !== "") {
+        this.loading = true;
+        this.options = await this.getCategoryInfoList(query);
+        this.loading = false;
+      } else {
+        this.options = [];
+      }
+    },
+    async getCategoryInfoList(query) {
+      // 计算开始页 = 单前页码 * 每页多少条
+      const skip = 0;
+      // 取多少条数据
+      const take = 100;
+      const keyword = query;
+      const data = {
+        skip,
+        take,
+        keyword,
+      };
+      const res = await getCategoryList(data);
+      return res.data.data;
+      // console.log(res);
     },
   },
 };
