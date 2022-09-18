@@ -171,3 +171,14 @@ export const resourceUpdate = async (data) => {
     console.error(err);
   }
 }
+
+export const getStatistics = async () => {
+  try {
+    const response = await axios({
+      ...API.STATISTICS,
+    })
+    return response.data;
+  } catch (err) {
+    console.error(err);
+  }
+}

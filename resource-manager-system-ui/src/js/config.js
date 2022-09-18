@@ -47,6 +47,10 @@ export const API = {
     method: 'POST',
     url: '/api/resource/update',
   },
+  STATISTICS: {
+    method: 'GET',
+    url: '/api/app/statistics',
+  },
 };
 
 export const TOKEN = 'token';
