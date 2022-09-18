@@ -1,5 +1,6 @@
 export class CreateResourceDto {
   readonly uid: number;
+  readonly cid: number;
   readonly name: string;
   readonly keywords: string;
 }

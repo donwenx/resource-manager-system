@@ -22,6 +22,7 @@ export class ResourceService {
    */
   async createResource(
     uid: number,
+    cid: number,
     name: string,
     path: string,
     originalName: string,
@@ -30,6 +31,7 @@ export class ResourceService {
   ) {
     const data = new Resource();
     data.uid = uid;
+    data.cid = cid;
     data.name = name;
     data.time = getTimeStamp();
     data.path = path;

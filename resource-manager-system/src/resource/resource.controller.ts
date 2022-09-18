@@ -74,6 +74,7 @@ export class ResourceController {
     // 需要拿到uid、name、path
     return await this.resourceService.createResource(
       token.uid,
+      createResourceDto.cid,
       createResourceDto.name,
       filePath,
       fileName,

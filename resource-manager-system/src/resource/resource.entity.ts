@@ -8,6 +8,9 @@ export class Resource {
   @Column({ type: 'int' })
   uid: number;
 
+  @Column({ type: 'int', default: 0 })
+  cid: number;
+
   @Column({ length: 255, type: 'varchar' })
   name: string;
 
