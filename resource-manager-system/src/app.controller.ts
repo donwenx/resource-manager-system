@@ -1,12 +1,14 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { AppService } from './app.service';
+import { RequestToken } from './common/user.decorator';
+import { Token } from './token/token.entity';
 
-@Controller()
+@Controller('/app')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('/statistics')
+  async getStatistics(@RequestToken() token: Token) {
+    return await this.appService.getStatistics();
   }
 }

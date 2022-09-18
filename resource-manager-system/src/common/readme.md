@@ -7,3 +7,5 @@ https://docs.nestjs.cn/9/customdecorators?id=%e4%bd%bf%e7%94%a8%e7%ae%a1%e9%81%9
 
 https://docs.nestjs.cn/9/interceptors?id=%e5%93%8d%e5%ba%94%e6%98%a0%e5%b0%84
 
+
+https://github.com/typeorm/typeorm/blob/master/docs/select-query-builder.md

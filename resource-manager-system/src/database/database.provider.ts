@@ -16,7 +16,7 @@ export const databaseProviders = [
         logging: true,
       });
       await dataSource.initialize();
-      return dataSource.manager;
+      return dataSource;
     },
   },
 ];

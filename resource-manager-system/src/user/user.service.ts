@@ -114,4 +114,8 @@ export class UserService {
     const data = await this.userRepository.findAndCount(find);
     return data;
   }
+
+  async getUserCount() {
+    return await this.userRepository.count({ where: [{ state: 1 }] });
+  }
 }

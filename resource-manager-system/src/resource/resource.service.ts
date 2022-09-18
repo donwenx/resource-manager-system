@@ -11,7 +11,7 @@ export class ResourceService {
   constructor(
     @Inject('RESOURCE_REPOSITORY')
     private readonly resourceRepository: Repository<Resource>,
-  ) {}
+  ) { }
 
   /**
    * 创建资源表
@@ -110,5 +110,27 @@ export class ResourceService {
     }
     // console.log('resource:', data, resource);
     return await this.resourceRepository.save(resource);
+  }
+
+  async getDownloadCount() {
+    const manager = this.resourceRepository.manager;
+    const { sum } = await manager
+      .createQueryBuilder()
+      .select('SUM(resource.downloads)', 'sum')
+      .from(Resource, 'resource')
+      .where('resource.state = :state', { state: 1 })
+      .getRawOne();
+    return sum;
+  }
+
+  async getFileSizeCount() {
+    const manager = this.resourceRepository.manager;
+    const { sum } = await manager
+      .createQueryBuilder()
+      .select('SUM(resource.size)', 'sum')
+      .from(Resource, 'resource')
+      .where('resource.state = :state', { state: 1 })
+      .getRawOne();
+    return sum;
   }
 }
