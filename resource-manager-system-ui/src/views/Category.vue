@@ -78,8 +78,17 @@
       </el-dialog>
 
       <el-dialog title="创建分类" :visible.sync="dialogCategoryCreateVisible">
-        <el-form :rules="rules" :model="categoryForm" label-position="left">
-          <el-form-item label="分类名称" :label-width="formLabelWidth"  prop="name">
+        <el-form
+          ref="edit"
+          :rules="rules"
+          :model="categoryForm"
+          label-position="left"
+        >
+          <el-form-item
+            label="分类名称"
+            :label-width="formLabelWidth"
+            prop="name"
+          >
             <el-input v-model="categoryForm.name" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
@@ -121,7 +130,8 @@ export default {
       rules: {
         name: [{ required: true, message: "请输入分类名", trigger: "blur" }],
       },
-      categoryForm: { // 创建分类的表单
+      categoryForm: {
+        // 创建分类的表单
         name: "",
       },
       formLabelWidth: "120px",
@@ -157,18 +167,24 @@ export default {
     // 创建分类方法
     async handleCategoryCreate() {
       this.dialogCategoryCreateVisible = false;
-      const data = this.categoryForm;
-      // console.log(data);
-      const res = await categoryCreate(data);
-      // console.log(res);
-      if (res.code === 0) {
-        this.$message({
-          message: "分类修改成功！",
-          type: "success",
-        });
-      }
-
-      this.getCategoryInfoList();
+      this.$refs.edit.validate(async (valid) => {
+        if (valid) {
+          const data = this.categoryForm;
+          // console.log(data);
+          const res = await categoryCreate(data);
+          // console.log(res);
+          if (res.code === 0) {
+            this.$message({
+              message: "分类创建成功！",
+              type: "success",
+            });
+          }
+          this.getCategoryInfoList();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     handleEdit(index, row) {
       console.log(index, row.rid);
