@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { FindManyOptions, Like, Repository } from 'typeorm';
+import { FindManyOptions, In, Like, Repository } from 'typeorm';
 import { Category } from './category.entity';
 
 export class CategoryService {
@@ -70,5 +70,10 @@ export class CategoryService {
     }
 
     return await this.repository.findAndCount(find);
+  }
+
+  async getByCidArray(cid: number[]) {
+    const data = await this.repository.findBy({ cid: In(cid) });
+    return data;
   }
 }

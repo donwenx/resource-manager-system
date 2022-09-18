@@ -19,6 +19,7 @@ import { CreateResourceDto, UpdateResourceDto } from './resource.dto';
 import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
 import type { Response } from 'express';
+import { CategoryService } from '../category/category.service';
 
 // 只实现业务逻辑
 // 列如：验证密码、读取用户表、
@@ -26,6 +27,9 @@ import type { Response } from 'express';
 export class ResourceController {
   @Inject()
   private readonly resourceService: ResourceService;
+
+  @Inject()
+  private readonly categoryService: CategoryService;
 
   @Get('/list')
   async findAll(
@@ -43,7 +47,17 @@ export class ResourceController {
       take,
       keyword,
     );
-    return { data, size: data.length, count };
+    const cidArray = data.map((item) => {
+      return item.cid;
+    });
+    const categoryArray = await this.categoryService.getByCidArray(cidArray);
+    const newData = data.map((item) => {
+      const category = categoryArray.find((category) => {
+        return category.cid === item.cid;
+      });
+      return { ...item, category };
+    });
+    return { data: newData, size: data.length, count };
   }
 
   /**
