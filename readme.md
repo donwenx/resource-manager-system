@@ -15,17 +15,15 @@
 ```bash
 git clone https://gitee.com/zijiu7/resource-manager-system.git
 
-cd resource-manager-system
-cd resource-manager-system
+# 下载后端依赖
 npm install
-
-# 后端运行命令
-npm run start:dev
-
+# 下载前端依赖
+cd client
+npm install
 cd ..
-cd resource-manager-system-ui
-# 前端运行命令
-npm run serve
+# 启动命令
+npm run dev
+
 ```
 
 #### 2. 配置数据库
