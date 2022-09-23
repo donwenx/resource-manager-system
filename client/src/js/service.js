@@ -7,7 +7,7 @@ import { Message } from 'element-ui';
 axios.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   const token = window.localStorage.getItem(TOKEN);
-  if(token) {
+  if (token) {
     config.headers.token = token || '';
   }
   // console.log('config.headers.token', token);
@@ -22,15 +22,17 @@ axios.interceptors.response.use((response) => {
   // 2xx 范围内的状态码都会触发该函数。
   // 对响应数据，token过期，或者无token时跳转登录
   const code = response.data.code;
-  if(code === 1) {
-    router.push('/login');
+  if (code === 1) {
+    router.push({ name: 'login' });
+    return;
   }
 
-  if(code !== 0) {
+  if (code !== 0) {
     Message({
       message: response.data.message,
       type: 'error'
     });
+    return;
   }
   // console.log('response', response)
   return response;
@@ -76,13 +78,13 @@ export const login = async (data) => {
 }
 
 export const logout = async () => {
-  try{
+  try {
     const response = await axios({
       ...API.LOGOUT_USER,
     })
     window.localStorage.removeItem(TOKEN);
     console.log(response);
-  } catch(err) {
+  } catch (err) {
     console.error(err)
   }
 }
@@ -100,13 +102,13 @@ export const upload = async (data) => {
 }
 
 export const userInfoList = async (data) => {
-  try{
+  try {
     const response = await axios({
       ...API.USER_INFO_LIST,
       params: data,
     })
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
 }
@@ -118,7 +120,7 @@ export const userUpdate = async (data) => {
       data,
     })
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
 }
@@ -130,7 +132,7 @@ export const supUserUpdate = async (data) => {
       data,
     })
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
 }

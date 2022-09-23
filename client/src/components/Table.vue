@@ -172,7 +172,7 @@ export default {
       this.$emit("searchChange", this.keyword);
     },
     dateFormat(time) {
-      return moment(time * 1000).format("YYYY-MM-DD hh:mm:ss");
+      return moment(time * 1000).format("YYYY-MM-DD HH:mm:ss");
     },
   },
 };

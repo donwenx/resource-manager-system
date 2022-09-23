@@ -37,17 +37,22 @@ export class UserController {
       loginDto.uid,
       loginDto.password,
     );
-    if (ok) {
-      const token = await this.tokenService.createToken(
-        loginDto.uid,
-        2 * 60 * 60,
-      );
-      const user = await this.userService.getUser(loginDto.uid);
-      const data = { token, uid: loginDto.uid, name: user.name };
-      return data;
+    if (!ok) {
+      // 密码错误，返回state = 1；
+      throw new Error('密码错误，登录失败');
     }
-    // 密码错误，返回state = 1；
-    throw new Error('密码错误，登录失败');
+    const token = await this.tokenService.createToken(
+      loginDto.uid,
+      2 * 60 * 60,
+    );
+    const user = await this.userService.getUser(loginDto.uid);
+    const data = {
+      token,
+      uid: loginDto.uid,
+      name: user.name,
+      authority: user.authority,
+    };
+    return data;
   }
 
   @Post('/logout')

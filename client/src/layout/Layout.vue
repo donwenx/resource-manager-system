@@ -61,39 +61,17 @@
 <script>
 import { logout } from "@/js/service.js";
 import { USER_INFO } from '@/js/config.js'
+import { getSidebar } from '@/js/sidebar.js'
 export default {
   data() {
     return {
-      sidebar: [
-        {
-          title: "资源管理",
-          id: "1",
-          icon: "el-icon-setting",
-          children: [
-            { title: "使用统计", id: "/" },
-            { title: "资源上传", id: "/upload" },
-            { title: "资源下载", id: "/download" },
-            { title: "资源列表", id: "/resourceList" },
-          ],
-        },
-        {
-          title: "用户管理",
-          id: "2",
-          icon: "el-icon-menu",
-          children: [{ title: "用户列表", id: "/userList" }],
-        },
-        {
-          title: "分类管理",
-          id: "3",
-          icon: "el-icon-document",
-          children: [{ title: "分类列表", id: "/category" }],
-        },
-      ],
+      sidebar: [],
       userInfo: {},
     };
   },
   created() {
     this.userInfo = this.getUserInfo();
+    this.sidebar = getSidebar(this.userInfo.authority);
   },
   methods: {
     handleOpen(key, keyPath) {
