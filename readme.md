@@ -49,3 +49,28 @@ npm run dev
 - [登录逻辑实现](./docs/%E7%99%BB%E5%BD%95%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0.md)
 
 - [上传文件逻辑实现](./docs/%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6%E9%80%BB%E8%BE%91%E5%AE%9E%E7%8E%B0.md)
+
+
+---
+
+### 前端
+
+功能实现：
+- 对象的序列化和反序列化（JSON）
+  - JSON.stringify + JSON.parse
+- 日期格式化组件（moment）
+- axios拦截器
+  - 请求拦截器（每次发起请求前处理数据，列如：加上token）
+  - 响应拦截器（每次响应后处理数据，列如：code等于1跳登录）
+- vue-router的使用
+  - 读取路由参数：router.params
+  - 路由跳转：router.push('/'),router.push({ name: 'login' })
+  - 全局路由的跳转
+- element 组件的使用
+  - 侧边栏处理
+  - 远程搜索类型名称
+  - 分页组件使用
+  - 消息组件，（全局消息，组件消息）
+- localStorage
+- proxy跨域处理
+
