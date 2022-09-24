@@ -38,6 +38,6 @@ export class Resource {
   @Column({ type: 'int', default: 0 })
   downloads: number;
 
-  @Column({ type: 'int', default: 1 })
+  @Column({ type: 'int', default: 1 }) // 0未使用，1发布，2审核， 3未审核
   state: number;
 }

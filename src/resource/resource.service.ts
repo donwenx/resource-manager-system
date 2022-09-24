@@ -1,17 +1,18 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, Res } from '@nestjs/common';
 import { getTimeStamp } from '../util/function';
-import { FindManyOptions, Like, Repository } from 'typeorm';
+import { FindManyOptions, In, Like, Repository } from 'typeorm';
 import { Resource } from './resource.entity';
-import { User } from 'src/user/user.entity';
-import { Token } from 'src/token/token.entity';
 import { UpdateResourceDto } from './resource.dto';
+import { ResourceState } from './resource.enum';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class ResourceService {
-  constructor(
-    @Inject('RESOURCE_REPOSITORY')
-    private readonly resourceRepository: Repository<Resource>,
-  ) { }
+  @Inject('RESOURCE_REPOSITORY')
+  private readonly resourceRepository: Repository<Resource>;
+
+  @Inject()
+  private readonly categoryService: CategoryService;
 
   /**
    * 创建资源表
@@ -28,6 +29,7 @@ export class ResourceService {
     originalName: string,
     mimeType: string,
     size: number,
+    state: number,
   ) {
     const data = new Resource();
     data.uid = uid;
@@ -38,6 +40,7 @@ export class ResourceService {
     data.originalName = originalName;
     data.mimeType = mimeType;
     data.size = size;
+    data.state = state;
     return await this.resourceRepository.save(data);
   }
 
@@ -66,22 +69,27 @@ export class ResourceService {
    * @param take 到第几页
    * @returns 返回一个资源数组
    */
-  async getResourceList(skip: number, take: number, keyword: string) {
+  async getResourceList(
+    skip: number,
+    take: number,
+    keyword: string,
+    states: ResourceState[] = [ResourceState.NORMAL],
+  ) {
     const rule = [
       {
         name: Like(`%${keyword}%`),
-        state: 1,
+        state: In(states),
       },
       {
         keywords: Like(`%${keyword}%`),
-        state: 1,
+        state: In(states),
       },
     ];
     const find: FindManyOptions<Resource> = {
       skip,
       take,
     };
-    find.where = [{ state: 1 }];
+    find.where = [{ state: In(states) }];
 
     if (keyword) {
       find.where = rule;
@@ -134,5 +142,19 @@ export class ResourceService {
       .where('resource.state = :state', { state: 1 })
       .getRawOne();
     return sum;
+  }
+
+  // 填充分类
+  async fillCategory(data) {
+    const cidArray = data.map((item) => {
+      return item.cid;
+    });
+    const categoryArray = await this.categoryService.getByCidArray(cidArray);
+    return data.map((item) => {
+      const category = categoryArray.find((category) => {
+        return category.cid === item.cid;
+      });
+      return { ...item, category };
+    });
   }
 }

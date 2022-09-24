@@ -20,6 +20,7 @@ import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
 import type { Response } from 'express';
 import { CategoryService } from '../category/category.service';
+import { ResourceState } from './resource.enum';
 
 // 只实现业务逻辑
 // 列如：验证密码、读取用户表、
@@ -47,16 +48,7 @@ export class ResourceController {
       take,
       keyword,
     );
-    const cidArray = data.map((item) => {
-      return item.cid;
-    });
-    const categoryArray = await this.categoryService.getByCidArray(cidArray);
-    const newData = data.map((item) => {
-      const category = categoryArray.find((category) => {
-        return category.cid === item.cid;
-      });
-      return { ...item, category };
-    });
+    const newData = await this.resourceService.fillCategory(data);
     return { data: newData, size: data.length, count };
   }
 
@@ -84,6 +76,8 @@ export class ResourceController {
     writeImage.write(file.buffer);
     // return '上传成功';
 
+    // 默认审核中
+    const state = ResourceState.AUDIT;
     // 插入数据库
     // 需要拿到uid、name、path
     return await this.resourceService.createResource(
@@ -94,6 +88,7 @@ export class ResourceController {
       fileName,
       mimeType,
       size,
+      state,
     );
   }
 
@@ -144,5 +139,43 @@ export class ResourceController {
     return data;
   }
 
+  /**
+   * 显示审核和未审核列表
+   * @param token
+   * @param skip
+   * @param take
+   * @param keyword
+   * @returns
+   */
+  @Get('/listAudit')
+  async listAudit(
+    @RequestToken() token: Token,
+    @Query('skip')
+    skip: number,
+    @Query('take')
+    take: number,
+    @Query('keyword')
+    keyword: string,
+    @Query('state')
+    state: number,
+  ): Promise<{ data: Resource[]; size: number; count: number }> {
+    // console.log('skip:', skip, take);
+    let states = [];
+
+    if (state) {
+      states = [state];
+    } else {
+      states = [ResourceState.AUDIT, ResourceState.NORMAL];
+    }
+
+    const [data, count] = await this.resourceService.getResourceList(
+      skip,
+      take,
+      keyword,
+      states,
+    );
+    const newData = await this.resourceService.fillCategory(data);
+    return { data: newData, size: data.length, count };
+  }
   // 文件权限
 }
