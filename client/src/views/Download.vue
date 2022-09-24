@@ -21,6 +21,7 @@
 import Layout from "../layout/Layout.vue";
 import Table from "@/components/Table.vue";
 import { resourceList } from "@/js/service.js";
+import { TOKEN } from '@/js/config.js';
 export default {
   components: {
     Layout,
@@ -69,7 +70,8 @@ export default {
     },
     async handleDownLoad(row) {
       // console.log("下载", row.rid);
-      window.location.href = `/api/resource/download?rid=${row.rid}`;
+      const token = window.localStorage.getItem(TOKEN);
+      window.location.href = `/api/resource/download?rid=${row.rid}&token=${token}`;
       setTimeout(() => {
         this.createResourceList();
       }, 1000);

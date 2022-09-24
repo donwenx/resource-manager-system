@@ -104,13 +104,10 @@ export class ResourceController {
    */
   @Get('/download')
   async download(
+    @RequestToken() token: Token,
     @Query('rid') rid: number,
     @Res({ passthrough: true }) res: Response,
   ) {
-    // if(){
-    //   throw new Error('当前账号未登录，需登录后下载！')
-    // }
-
     // console.log('rid', rid);
     const data = await this.resourceService.getByRid(rid);
 

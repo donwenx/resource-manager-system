@@ -24,7 +24,7 @@ axios.interceptors.response.use((response) => {
   const code = response.data.code;
   if (code === 1) {
     router.push({ name: 'login' });
-    return;
+    return response;
   }
 
   if (code !== 0) {
@@ -32,7 +32,7 @@ axios.interceptors.response.use((response) => {
       message: response.data.message,
       type: 'error'
     });
-    return;
+    return response;
   }
   // console.log('response', response)
   return response;
