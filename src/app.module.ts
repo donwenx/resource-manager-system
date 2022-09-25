@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserController } from './user/user.controller';
@@ -10,6 +10,7 @@ import { ResourceService } from './resource/resource.service';
 import { CategoryController } from './category/category.controller';
 import { CategoryModule } from './category/category.module';
 import { CategoryService } from './category/category.service';
+import { AdminResourceController } from './resource/admin-resource.controller';
 @Module({
   imports: [UserModule, ResourceModule, CategoryModule],
   controllers: [
@@ -17,6 +18,7 @@ import { CategoryService } from './category/category.service';
     UserController,
     ResourceController,
     CategoryController,
+    AdminResourceController,
   ],
   providers: [AppService, UserService, ResourceService, CategoryService],
 })

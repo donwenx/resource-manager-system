@@ -78,3 +78,33 @@ npm run dev
 - localStorage
 - proxy跨域处理
 
+
+### 后端
+
+功能实现:
+- 
+
+
+### 自动生成目录结构
+
+- （nest g resource admin）
+https://docs.nestjs.com/cli/overview
+
+生成的目录结构：
+admin.controller.spec.ts
+admin.controller.ts
+admin.module.ts
+admin.service.spec.ts
+admin.service.ts
+
+```bash
+? What transport layer do you use? REST API
+? Would you like to generate CRUD entry points? No
+CREATE src/admin/admin.controller.ts (210 bytes)
+CREATE src/admin/admin.controller.spec.ts (566 bytes)
+CREATE src/admin/admin.module.ts (247 bytes)
+CREATE src/admin/admin.service.ts (89 bytes)
+CREATE src/admin/admin.service.spec.ts (453 bytes)
+UPDATE package.json (2256 bytes)
+UPDATE src/app.module.ts (1054 bytes)
+```
