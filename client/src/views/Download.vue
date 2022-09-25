@@ -11,6 +11,7 @@
           @currentChange="handleCurrentChange"
           :totalPage="count"
           @searchChange="handleSearchChange"
+          @handleEditUpdate="handleEditUpdate"
         ></Table>
       </el-card>
     </div>
@@ -18,10 +19,11 @@
 </template>
 
 <script>
-import Layout from "../layout/Layout.vue";
-import Table from "@/components/Table.vue";
-import { resourceList } from "@/js/service.js";
+import Layout from '../layout/Layout.vue';
+import Table from '@/components/Table.vue';
+import { resourceList } from '@/js/service.js';
 import { TOKEN } from '@/js/config.js';
+import { resourceUpdate } from "@/js/service.js";
 export default {
   components: {
     Layout,
@@ -33,7 +35,7 @@ export default {
       pageSize: 5,
       currentPage: 1,
       count: 0,
-      keyword: "",
+      keyword: '',
     };
   },
   async created() {
@@ -58,7 +60,7 @@ export default {
       const res = await resourceList(data);
       this.tableData = res.data;
       this.count = res.count;
-      console.log("resourceList", this.tableData);
+      console.log('resourceList', this.tableData);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
@@ -75,6 +77,26 @@ export default {
       setTimeout(() => {
         this.createResourceList();
       }, 1000);
+    },
+    // 更新文件信息
+    async handleEditUpdate(data) {
+      await resourceUpdate(data);
+      // console.log("update文件信息", res);
+      this.$message({
+        message: '文件修改成功！',
+        type: 'success',
+      });
+      this.createResourceList();
+    },
+    handleDelete(rid) {
+      const data = { rid, state: 0 };
+      resourceUpdate(data);
+      this.$message({
+        message: '文件删除成功！',
+        type: 'success',
+      });
+      console.log('删除资源', rid);
+      this.createResourceList();
     },
   },
 };

@@ -51,7 +51,7 @@ export class ResourceController {
     let newData = await this.resourceService.fillCategory(data);
     // 只能编辑自己的文件
     newData = newData.map((item) => {
-      item['edit'] = item.uid === token.uid;
+      item['owner'] = item.uid === token.uid;
       return item;
     });
     return { data: newData, size: data.length, count };

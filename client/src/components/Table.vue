@@ -58,14 +58,14 @@
               >下载</el-button
             >
             <el-button
-              v-if="!isDownload"
+              v-if="isOptions(scope.row)"
               size="mini"
               type="primary"
               @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
             >
             <el-button
-              v-if="!isDownload"
+              v-if="isOptions(scope.row)"
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
@@ -173,6 +173,13 @@ export default {
     },
     dateFormat(time) {
       return moment(time * 1000).format("YYYY-MM-DD HH:mm:ss");
+    },
+    // 判断是否是下载页面需要的功能
+    isOptions(row) {
+      if(this.isDownload === true){
+        return row.owner;
+      }
+      return true;
     },
   },
 };
