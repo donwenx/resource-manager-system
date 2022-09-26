@@ -36,15 +36,27 @@
         <el-table-column label="分类名" width="100">
           <template slot-scope="scope">
             <span style="margin-left: 10px">{{
-              scope.row.category ? scope.row.category.name : ""
+              scope.row.category ? scope.row.category.name : ''
             }}</span>
           </template>
         </el-table-column>
 
-        <el-table-column label="下载量" width="180">
+        <el-table-column label="下载量" width="80">
           <template slot-scope="scope">
             <i class="el-icon-download"></i>
             <span style="margin-left: 10px">{{ scope.row.downloads }}</span>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="审批状态">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.state"
+              :active-value="1"
+              :inactive-value="3"
+              @change="handleAudit(scope.row)"
+            >
+            </el-switch>
           </template>
         </el-table-column>
 
@@ -57,6 +69,7 @@
               @click="handleDownLoad(scope.$index, scope.row)"
               >下载</el-button
             >
+
             <el-button
               v-if="isOptions(scope.row)"
               size="mini"
@@ -111,7 +124,8 @@
 </template>
 
 <script>
-import moment from "moment";
+import moment from 'moment';
+import { RESOURCE_STATE } from '@/js/config';
 export default {
   props: {
     tableData: Array,
@@ -121,15 +135,15 @@ export default {
   },
   data() {
     return {
-      keyword: "",
+      keyword: '',
       dialogFormVisible: false,
       form: {
-        name: "",
-        img: "",
+        name: '',
+        img: '',
         state: 1,
-        keywords: "",
+        keywords: '',
       },
-      formLabelWidth: "120px",
+      formLabelWidth: '120px',
       currentPage: 1,
       rid: 0,
     };
@@ -137,7 +151,10 @@ export default {
   methods: {
     handleDownLoad(index, row) {
       // console.log("handleDownLoad", index, row);
-      this.$emit("handleDownLoad", row);
+      this.$emit('handleDownLoad', row);
+    },
+    handleAudit(row) {
+      this.$emit('handleAudit', row);
     },
     handleEdit(index, row) {
       console.log(index, row.rid);
@@ -147,7 +164,7 @@ export default {
     },
     handleDelete(index, row) {
       // console.log(index, row.rid);
-      this.$emit("handleDelete", row.rid);
+      this.$emit('handleDelete', row.rid);
     },
     // 编辑文件
     handleEditUpdate() {
@@ -157,29 +174,33 @@ export default {
         ...this.form,
       };
       // console.log(data);
-      this.$emit("handleEditUpdate", data);
+      this.$emit('handleEditUpdate', data);
     },
     // 分页
     handleSizeChange(val) {
-      this.$emit("sizeChange", val);
+      this.$emit('sizeChange', val);
       console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      this.$emit("currentChange", val);
+      this.$emit('currentChange', val);
       console.log(`当前页: ${val}`);
     },
     handleSearchChange() {
-      this.$emit("searchChange", this.keyword);
+      this.$emit('searchChange', this.keyword);
     },
     dateFormat(time) {
-      return moment(time * 1000).format("YYYY-MM-DD HH:mm:ss");
+      return moment(time * 1000).format('YYYY-MM-DD HH:mm:ss');
     },
     // 判断是否是下载页面需要的功能
     isOptions(row) {
-      if(this.isDownload === true){
+      if (this.isDownload === true) {
         return row.owner;
       }
       return true;
+    },
+    // 判断是否通过审核
+    isAudit(row) {
+      return row.state === RESOURCE_STATE.AUDIT;
     },
   },
 };

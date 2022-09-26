@@ -31,6 +31,8 @@ export const API = {
     method: 'POST',
     url: '/api/user/supUpdate',
   },
+
+  // 资源
   UPLOAD_FILE: {
     method: 'POST',
     url: '/api/resource/upload',
@@ -51,6 +53,15 @@ export const API = {
     method: 'GET',
     url: '/api/app/statistics',
   },
+  RESOURCE_ADMIN_LIST: {
+    method: 'GET',
+    url: '/api/resource/admin/list',
+  },
+  RESOURCE_ADMIN_UPDATE: {
+    method: 'POST',
+    url: '/api/resource/admin/update',
+  },
+
   // 分类管理
   CATEGORY_CREATE: {
     method: 'POST',
@@ -70,3 +81,9 @@ export const TOKEN = 'token';
 export const USER_INFO = 'userInfo';
 
 export const HTTP_TIMEOUT = 30000;
+
+export const RESOURCE_STATE = {
+  DELETE: 2,
+  AUDIT: 3,
+  NORMAL: 1,
+}

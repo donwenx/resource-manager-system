@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <div class="resourceList">
+    <div class="resourceAdminList">
       <el-card>
         <Table
           :tableData="tableData"
@@ -13,6 +13,7 @@
           @searchChange="handleSearchChange"
           @handleEditUpdate="handleEditUpdate"
           @handleDelete="handleDelete"
+          @handleAudit="handleAudit"
         ></Table>
       </el-card>
     </div>
@@ -20,9 +21,10 @@
 </template>
 
 <script>
-import Layout from "@/layout/Layout.vue";
-import Table from "@/components/Table.vue";
-import { resourceList, resourceUpdate } from "@/js/service/index";
+import Layout from '@/layout/Layout.vue';
+import Table from '@/components/Table.vue';
+import { resourceAdminList, resourceAdminUpdate } from '@/js/service/index';
+
 export default {
   components: {
     Layout,
@@ -34,18 +36,18 @@ export default {
       pageSize: 5,
       currentPage: 1,
       count: 0,
-      keyword: "",
+      keyword: '',
     };
   },
   async created() {
-    this.createResourceList();
+    this.getResourceList();
   },
   methods: {
     handleSizeChange(val) {
       this.pageSize = val;
-      this.createResourceList();
+      this.getResourceList();
     },
-    async createResourceList() {
+    async getResourceList() {
       // 计算开始页 = 单前页码 * 每页多少条
       const skip = (this.currentPage - 1) * this.pageSize;
       // 取多少条数据
@@ -56,18 +58,18 @@ export default {
         take,
         keyword,
       };
-      const res = await resourceList(data);
+      const res = await resourceAdminList(data);
       this.tableData = res.data;
       this.count = res.count;
-      // console.log("resourceList", this.tableData);
+      // console.log("resourceAdminList", this.tableData);
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      this.createResourceList();
+      this.getResourceList();
     },
     handleSearchChange(keyword) {
       this.keyword = keyword;
-      this.createResourceList();
+      this.getResourceList();
     },
     handleDownLoad(row) {
       // console.log("下载", row.rid);
@@ -75,30 +77,40 @@ export default {
     },
     // 更新文件信息
     async handleEditUpdate(data) {
-      await resourceUpdate(data);
+      await resourceAdminUpdate(data);
       // console.log("update文件信息", res);
       this.$message({
-        message: "文件修改成功！",
-        type: "success",
+        message: '文件修改成功！',
+        type: 'success',
       });
-      this.createResourceList();
+      this.getResourceList();
     },
     handleDelete(rid) {
       const data = { rid, state: 0 };
-      resourceUpdate(data);
+      resourceAdminUpdate(data);
       this.$message({
-        message: "文件删除成功！",
-        type: "success",
+        message: '文件删除成功！',
+        type: 'success',
       });
-      console.log("删除资源", rid);
-      this.createResourceList();
+      console.log('删除资源', rid);
+      this.getResourceList();
+    },
+    // 审核
+    handleAudit(row) {
+      const data = { rid: row.rid, state: row.state };
+      resourceAdminUpdate(data);
+      this.$message({
+        type: 'success',
+        message: '状态成功！',
+      });
+      this.getResourceList();
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.resourceList {
+.resourceAdminList {
   width: 100%;
 }
 </style>
