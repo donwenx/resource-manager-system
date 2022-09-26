@@ -22,7 +22,7 @@
 <script>
 import Layout from "@/layout/Layout.vue";
 import Table from "@/components/Table.vue";
-import { resourceList, resourceUpdate } from "@/js/service.js";
+import { resourceList, resourceUpdate } from "@/js/service/index";
 export default {
   components: {
     Layout,

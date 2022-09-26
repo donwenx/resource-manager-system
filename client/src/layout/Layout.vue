@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { logout } from "@/js/service.js";
+import { logout } from "@/js/service/index";
 import { USER_INFO } from '@/js/config.js'
 import { getSidebar } from '@/js/sidebar.js'
 export default {

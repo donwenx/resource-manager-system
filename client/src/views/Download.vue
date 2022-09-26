@@ -21,9 +21,9 @@
 <script>
 import Layout from '../layout/Layout.vue';
 import Table from '@/components/Table.vue';
-import { resourceList } from '@/js/service.js';
+import { resourceList } from '@/js/service/index';
 import { TOKEN } from '@/js/config.js';
-import { resourceUpdate } from "@/js/service.js";
+import { resourceUpdate } from "@/js/service/index";
 export default {
   components: {
     Layout,

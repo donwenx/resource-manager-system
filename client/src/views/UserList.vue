@@ -106,7 +106,7 @@
 <script>
 import Layout from "../layout/Layout.vue";
 import moment from "moment";
-import { userInfoList, supUserUpdate } from "@/js/service.js";
+import { userInfoList, supUserUpdate } from "@/js/service/index";
 export default {
   components: {
     Layout,

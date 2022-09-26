@@ -64,7 +64,7 @@
 
 <script>
 import Layout from "../layout/Layout.vue";
-import { upload, getCategoryList } from "@/js/service.js";
+import { upload, getCategoryList } from "@/js/service/index";
 export default {
   components: {
     Layout,

@@ -41,7 +41,7 @@
 
 <script>
 import BrandCard from "@/components/BrandCard.vue";
-import { login } from "@/js/service.js";
+import { login } from "@/js/service/index";
 export default {
   data() {
     return {

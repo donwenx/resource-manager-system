@@ -112,7 +112,7 @@ import {
   categoryCreate,
   getCategoryList,
   categoryUpdate,
-} from "@/js/service.js";
+} from "@/js/service/index";
 export default {
   components: {
     Layout,

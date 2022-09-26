@@ -22,7 +22,7 @@ import Layout from "../layout/Layout.vue";
 import DownloadIcon from "../assets/icon-download.svg";
 import DiskIcon from "../assets/icon-disk.svg";
 import UsersIcon from "../assets/icon-users.svg";
-import { getStatistics } from "@/js/service.js";
+import { getStatistics } from "@/js/service/index";
 
 export default {
   name: "Home",
