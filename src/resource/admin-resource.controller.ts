@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Resource } from './resource.entity';
 import { ResourceState } from './resource.enum';
 import { RequestToken } from '../common/user.decorator';
-import { UpdateResourceDto } from './resource.dto';
+import { ListAuditResourceDto, UpdateResourceDto } from './resource.dto';
 import { Token } from '../token/token.entity';
 import { ResourceService } from './resource.service';
 
@@ -36,15 +36,9 @@ export class AdminResourceController {
   @Get('/list')
   async listAudit(
     @RequestToken() token: Token,
-    @Query('skip')
-    skip: number,
-    @Query('take')
-    take: number,
-    @Query('keyword')
-    keyword: string,
-    @Query('state')
-    state: number,
+    @Query() listAuditResourceDto: ListAuditResourceDto,
   ): Promise<{ data: Resource[]; size: number; count: number }> {
+    const { state, skip, take, keyword } = listAuditResourceDto;
     // console.log('skip:', skip, take);
     let states = [];
 

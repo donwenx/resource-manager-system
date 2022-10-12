@@ -15,7 +15,11 @@ import { ResourceService } from './resource.service';
 import { createReadStream, createWriteStream } from 'fs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createFilePath, sha256 } from '../util/function';
-import { CreateResourceDto, UpdateResourceDto } from './resource.dto';
+import {
+  CreateResourceDto,
+  ListResourceDto,
+  UpdateResourceDto,
+} from './resource.dto';
 import { RequestToken } from '../common/user.decorator';
 import { Token } from '../token/token.entity';
 import type { Response } from 'express';
@@ -35,18 +39,13 @@ export class ResourceController {
   @Get('/list')
   async findAll(
     @RequestToken() token: Token,
-    @Query('skip')
-    skip: number,
-    @Query('take')
-    take: number,
-    @Query('keyword')
-    keyword: string,
+    @Query() listResourceDto: ListResourceDto,
   ): Promise<{ data: Resource[]; size: number; count: number }> {
     // console.log('skip:', skip, take);
     const [data, count] = await this.resourceService.getResourceList(
-      skip,
-      take,
-      keyword,
+      listResourceDto.skip,
+      listResourceDto.take,
+      listResourceDto.keyword,
     );
     let newData = await this.resourceService.fillCategory(data);
     // 只能编辑自己的文件
