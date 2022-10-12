@@ -3,6 +3,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { AppException } from './exception';
 
@@ -11,9 +12,16 @@ export class ExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
-    const message = (exception as Error).message;
+    const httpResponse = (exception as BadRequestException).getResponse?.() as {
+      message: string[];
+    };
+    let message = (exception as Error).message;
     const code = (exception as AppException).code;
-    console.log(exception);
+
+    if (httpResponse) {
+      message = httpResponse.message.join(',');
+    }
+    console.log('httpResponse', exception, httpResponse);
     response.status(HttpStatus.OK).json({
       code: code || -1,
       message: message,
