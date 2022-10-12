@@ -19,7 +19,7 @@ export class ExceptionsFilter implements ExceptionFilter {
     const code = (exception as AppException).code;
 
     if (httpResponse) {
-      message = httpResponse.message.join(',');
+      message = httpResponse.message[0];
     }
     console.log('httpResponse', exception, httpResponse);
     response.status(HttpStatus.OK).json({

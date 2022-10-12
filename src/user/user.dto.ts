@@ -1,5 +1,13 @@
-import { IsNotEmpty, IsNumber, Length, IsIn, isNumber } from 'class-validator';
-import { UserState } from './user.enum';
+import {
+  IsNotEmpty,
+  IsNumber,
+  Length,
+  IsIn,
+  Min,
+  Max,
+  IsOptional,
+} from 'class-validator';
+import { UserState, UserSex, UserAuthority } from './user.enum';
 
 export class LoginDto {
   @IsNotEmpty()
@@ -26,28 +34,66 @@ export class UpdateUserDto {
   @IsNumber()
   uid: number;
 
-  @Length(6, 255)
+  @Length(2, 255)
+  @IsOptional()
   name?: string;
 
-  @IsIn(['未知', '女', '男'])
+  @IsIn([UserSex.UNKNOWN, UserSex.WOMEN, UserSex.MAN])
+  @IsOptional()
   sex?: string;
 
+  @IsOptional()
   avatar?: string;
 
   @IsNumber()
   @IsIn([UserState.NORMAL, UserState.DELETE])
+  @IsOptional()
   state?: number;
 
   @Length(6, 255)
+  @IsOptional()
   password?: string;
 }
 
+export class ListUserDto {
+  @IsNumber()
+  @Min(0)
+  skip: number;
+
+  @IsNumber()
+  @Min(1)
+  @Max(100)
+  take: number;
+
+  keyword: string;
+}
+
 export class SupUpdateUserDto {
+  @IsNotEmpty()
+  @IsNumber()
   uid: number;
+
+  @Length(2, 255)
+  @IsOptional()
   name?: string;
+
+  @IsIn([UserSex.UNKNOWN, UserSex.WOMEN, UserSex.MAN])
+  @IsOptional()
   sex?: string;
+
+  @IsOptional()
   avatar?: string;
+
+  @IsNumber()
+  @IsIn([UserState.NORMAL, UserState.DELETE])
+  @IsOptional()
   state?: number;
+
+  @Length(6, 255)
+  @IsOptional()
   password?: string;
+
+  @IsIn([UserAuthority.ADMIN, UserAuthority.USER])
+  @IsOptional()
   authority?: string;
 }

@@ -7,6 +7,7 @@ import {
   LoginDto,
   UpdateUserDto,
   SupUpdateUserDto,
+  ListUserDto,
 } from './user.dto';
 import { Token } from '../token/token.entity';
 import { RequestToken } from '../common/user.decorator';
@@ -77,18 +78,13 @@ export class UserController {
   @Get('/list')
   async findAll(
     @RequestToken() token: Token,
-    @Query('skip')
-    skip: number,
-    @Query('take')
-    take: number,
-    @Query('keyword')
-    keyword: string,
+    @Query() listUserDto: ListUserDto,
   ): Promise<{ data: User[]; size: number; count: number }> {
     // console.log('skip:', skip, take);
     const [data, count] = await this.userService.getUserList(
-      skip,
-      take,
-      keyword,
+      listUserDto.skip,
+      listUserDto.take,
+      listUserDto.keyword,
     );
     const userInfo = data.map((item) => {
       item.password = '';
