@@ -4,6 +4,7 @@ import { RequestToken } from '../common/user.decorator';
 import { Category } from './category.entity';
 import { CategoryService } from './category.service';
 import { UserService } from '../user/user.service';
+import { ListCategoryDto, UpdateDto } from './category.dto';
 
 @Controller('/category')
 export class CategoryController {
@@ -33,15 +34,11 @@ export class CategoryController {
    */
   @Post('/update')
   async update(
-    @Body('cid')
-    cid: number,
-    @Body('name')
-    name: string,
-    @Body('state')
-    state: number,
+    @Body() updateDto: UpdateDto,
     @RequestToken()
     token: Token,
   ) {
+    const { cid, name, state } = updateDto;
     const user = await this.userService.getUser(token.uid);
     if (user.authority !== '超级管理员') {
       throw new Error('只能超级管理员修改分类！');
@@ -59,13 +56,9 @@ export class CategoryController {
   @Get('/list')
   async findAll(
     @RequestToken() token: Token,
-    @Query('skip')
-    skip: number,
-    @Query('take')
-    take: number,
-    @Query('keyword')
-    keyword: string,
+    @Query() listCategoryDto: ListCategoryDto,
   ) {
+    const { skip, take, keyword } = listCategoryDto;
     const [data, count] = await this.categoryService.getList(
       skip,
       take,
